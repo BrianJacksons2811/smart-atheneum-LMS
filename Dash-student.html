@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Atheneum LMS - Student Portal</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="home.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="nav-container">
+            <div class="nav-bar">
+              <div class="logo-container">
+               <img src="./Images/Logo/Smart_Atheneum_2ND_option-removebg-preview.png" alt="Smart Atheneum Logo" class="logo-img">
+              <div class="logo-text">
+                <h1>Smart Atheneum</h1>
+                <p>Learning Management System</p>
+            </div>
+           </div>
+               <div class="user-controls">
+               <div class="notification-wrapper">
+                    <i class='bx bx-bell'></i>
+                    <span class="notification-badge">0</span>
+                      <div class="notification-dropdown">
+                        <p>No messages yet</p>
+                      </div>
+                    </div>
+                 <div class="profile-wrapper">
+                   <div class="profile-circle">
+                     <i class='bx bx-user'></i>
+                  </div>
+                <div class="profile-dropdown">
+                   <ul>
+                     <li><a href="#">Go to Profile</a></li>
+                     <li><a href="login.html">Logout</a></li>
+                   </ul>
+                  </div>
+               </div>
+            </div>
+          </div>
+         </div>
+        </header>
+        <section class="welcome-section">
+            <h2 id="welcomeMessage">Welcome back</h2>
+            <p>Continue your learning journey and achieve your academic goals.</p>
+        </section>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <i class='bx bx-book-alt stat-icon'></i>
+                <p class="stat-value" id="coursesCount">0</p>
+                <p class="stat-label">Enrolled Courses</p>
+                <p class="stat-description">This semester</p>
+            </div>
+            <div class="stat-card">
+                <i class='bx bx-calendar-check stat-icon'></i>
+                <p class="stat-value" id="assignmentsCount">0</p>
+                <p class="stat-label">Assignments Due</p>
+                <p class="stat-description">This week</p>
+            </div>
+            <div class="stat-card">
+                <i class='bx bx-line-chart stat-icon'></i>
+                <p class="stat-value" id="gpaCount">0.0</p>
+                <p class="stat-label">Current GPA</p>
+                <p class="stat-description">Current performance</p>
+            </div>
+            <div class="stat-card">
+                <i class='bx bx-user-check stat-icon'></i>
+                <p class="stat-value" id="attendanceCount">0%</p>
+                <p class="stat-label">Attendance</p>
+                <p class="stat-description">This semester</p>
+            </div>
+        </div>
+    </div>
+     <div class="dashboard">
+    <!-- Subjects Section -->
+    <div class="subjects">
+      <h2>📘 My Subjects</h2>
+      <div class="subject-grid">
+
+        <div class="subject-card">
+          <span class="material-icons subject-icon">calculate</span>
+          <div class="subject-title">Mathematics</div>
+          <div class="grade-tag">Grade 9-12</div>
+          <button class="enter-btn">Enter Classroom</button>
+        </div>
+
+        <div class="subject-card">
+          <span class="material-icons subject-icon">functions</span>
+          <div class="subject-title">Mathematical Literacy</div>
+          <div class="grade-tag">Grade 9-12</div>
+          <button class="enter-btn">Enter Classroom</button>
+        </div>
+
+        <div class="subject-card">
+          <span class="material-icons subject-icon">account_balance</span>
+          <div class="subject-title">Accounting</div>
+          <div class="grade-tag">Grade 9-12</div>
+          <button class="enter-btn">Enter Classroom</button>
+        </div>
+
+        <div class="subject-card">
+          <span class="material-icons subject-icon">science</span>
+          <div class="subject-title">Physical Sciences</div>
+          <div class="grade-tag">Grade 9-12</div>
+          <button class="enter-btn">Enter Classroom</button>
+        </div>
+
+        <div class="subject-card">
+          <span class="material-icons subject-icon">flight_takeoff</span>
+          <div class="subject-title">Tourism</div>
+          <div class="grade-tag">Grade 9-12</div>
+          <button class="enter-btn">Enter Classroom</button>
+        </div>
+
+        <div class="subject-card">
+          <span class="material-icons subject-icon">eco</span>
+          <div class="subject-title">Agriculture</div>
+          <div class="grade-tag">Grade 9-12</div>
+          <button class="enter-btn">Enter Classroom</button>
+        </div>
+
+        <div class="subject-card">
+          <span class="material-icons subject-icon">public</span>
+          <div class="subject-title">Geography</div>
+          <div class="grade-tag">Grade 9-12</div>
+          <button class="enter-btn">Enter Classroom</button>
+        </div>
+
+        <div class="subject-card">
+          <span class="material-icons subject-icon">biotech</span>
+          <div class="subject-title">Life Sciences</div>
+          <div class="grade-tag">Grade 9-12</div>
+          <button class="enter-btn">Enter Classroom</button>
+        </div>
+
+        <div class="subject-card">
+          <span class="material-icons subject-icon">history_edu</span>
+          <div class="subject-title">History</div>
+          <div class="grade-tag">Grade 9-12</div>
+          <button class="enter-btn">Enter Classroom</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Sidebar Section -->
+    <div class="sidebar">
+
+      <div class="sidebar-section">
+        <h3>⏰ Due Soon</h3>
+        <p>No assignments yet</p>
+      </div>
+
+      <div class="sidebar-section">
+        <h3>📊 Progress</h3>
+        <p>No progress data yet</p>
+      </div>
+
+      <div class="sidebar-section quick-actions">
+        <h3>⚡ Quick Actions</h3>
+        <button class="primary">View Schedule</button>
+        <button class="secondary">Submit Assignment</button>
+        <button class="secondary">Message Teacher</button>
+      </div>
+    </div>
+  </div>
+   <footer class="site-footer">
+    <div class="footer-container">
+        <div class="footer-section">
+            <h3>Subjects</h3>
+            <ul class="footer-links">
+                <li><a href="mathematics-lessons.html">Mathematics</a></li>
+                <li><a href="science-lessons.html">Physical Sciences</a></li>
+                <li><a href="literacy-lessons.html">Mathematical Literacy</a></li>
+                <li><a href="life-sciences-lessons.html">Life Sciences</a></li>
+                <li><a href="history-lessons.html">History</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h3>Support</h3>
+            <ul class="footer-links">
+                <li><a href="faq.html">FAQ</a></li>
+                <li><a href="help-center.html">Help Center</a></li>
+                <li><a href="tutorials.html">Video Tutorials</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <div class="footer-bottom-content">
+            <p>&copy; 2025 Smart Atheneum LMS. All rights reserved.</p>
+            <div class="legal-links">
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+            </div>
+        </div>
+    </div>
+</footer>
+    <script src="Dash-student.js"></script>
+</body>
+</html>

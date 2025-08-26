@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forgot Password</title>
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="forgot-pass.css">
+</head>
+<body>
+
+  <div class="forgot-container">
+    <h2>Forgot Password</h2>
+    <p>Please enter your email to reset your password</p>
+    <div class="input-box">
+      <i class='bx bx-envelope'></i>
+      <input type="email" id="email" placeholder="Enter your email" required>
+    </div>
+    <button onclick="sendResetLink()">Send Reset Link</button>
+    <div id="message" class="message"></div>
+        <a class="back-btn" href="login.html">&#8592 Back to Sign-In</a>
+  </div>
+
+  <script src="forgot.js"></script>
+</body>
+</html>

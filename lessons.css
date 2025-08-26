@@ -1,0 +1,72 @@
+:root{
+    --primary-color: #0d0113;
+    --second-color: #9a25d4;
+    --background-color-btn: #a855f7;
+    --line-color: #3d3c3caf;
+    --border-color: #6b11cb31;
+    --heading-color: #ececec;
+    --content-color: #a7a7a7;
+    --sub-tittle-color:#9e9d9d;
+      font-family: Arial, sans-serif;
+      
+}
+
+body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: var(--primary-color);
+        margin: 0;
+        padding: 20px;
+        color: #333;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            background-color: transparent;
+            color: var(--second-color);
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+        }
+        .lessons-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .lesson-card {
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .lesson-card h3 {
+            color: var(--heading-color);
+            margin-top: 0;
+        }
+
+        .lesson-card p{
+            color: var(--content-color);
+        }
+
+        button{
+            padding: 6px 8px;
+            background-color: var(--background-color-btn);
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            color: #ececec;
+            cursor: pointer;
+
+        }
+        .back-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 15px;
+            background-color: var(--border-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .back-button:hover {
+            background-color: var(--background-color-btn);
+            transition: 1.5s ease-in-out;
+        }

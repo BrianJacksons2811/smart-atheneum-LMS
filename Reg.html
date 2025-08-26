@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Registration</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="wrapper">
+    <form action="">
+      <div class="form-head">
+        <div class="first-icon">
+          <img src="./Images/import_contacts_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="icon">
+        </div>
+        <div class="reg-head">
+        <h1>Student Registration</h1>
+        <p>Join Smart Atheneum as a learner</p>
+        </div>
+      </div>
+
+      <div class="input-row">
+        <div class="input-box">
+          <input type="text" placeholder="Jane" name="firstName" required>
+          <label>First Name</label>
+        </div>
+        <div class="input-box">
+          <input type="text" placeholder="Smith" name="lastName" required>
+          <label>Last Name</label>
+        </div>
+      </div>
+
+      <div class="input-box">
+        <i class='bx bx-envelope'></i>
+        <input type="email" placeholder="student@smartatheneum.edu" name="email" required>
+        <label>Email</label>
+      </div>
+
+      <div class="input-row">
+        <div class="input-box">
+          <select name="grade" required>
+            <option value="">Grade Level</option>
+            <option>Grade 8</option>
+            <option>Grade 9</option>
+            <option>Grade 10</option>
+            <option>Grade 11</option>
+            <option>Grade 12</option>
+          </select>
+        </div>
+        <div class="input-box">
+          <i class='bx bx-calendar'></i>
+          <input type="date" name="dob" required>
+          <label>Date of Birth</label>
+        </div>
+      </div>
+
+      <div class="input-box">
+        <i class='bx bx-lock-alt'></i>
+        <input type="password" placeholder="Create a strong password" name="password" required>
+        <label>Password</label>
+      </div>
+
+      <div class="input-box">
+        <i class='bx bx-lock'></i>
+        <input type="password" placeholder="Confirm your password" name="confirmPassword" required>
+        <label>Confirm Password</label>
+      </div>
+      <div class="btn-link">
+        <p class="login-link">Already have an account? <a href="login.html">Sign in</a></p>
+      </div>
+      <button type="submit" class="btn">Create Student Account</button>
+
+      <div class="back-to-home">
+        <a href="index.html" class="back-btn">&#8592;Back to home</a>
+      </div>
+    </form>
+  </div>
+  <script src="index.js"></script>
+</body>
+</html>
