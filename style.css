@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 *{
     margin: 0;
@@ -85,6 +86,10 @@ body{
     transform: translate(-50%);
     font-size: 20px;
 }
+.input-box input:focus{
+    border-color: #a855f7;
+}
+
 /* eye*/
 
 .input-box {
@@ -125,9 +130,13 @@ body{
     justify-content: space-between;
     font-size: 14,5px;
     margin: -15px 0 15;
+    color: #636161;
 }
 
 .remember-forgot label input{
+    width: 15px;
+    height: 15px;
+    display: inline-block;
     accent-color: #ffff;
     margin-right: 3px;
 }
@@ -180,7 +189,7 @@ body{
 }
 
 .back-to-home {
-  justify-self: center;
+  margin-left: 110px;
   cursor: pointer;
   transition: background-color 0.3s ease;
   color: #2d0342;

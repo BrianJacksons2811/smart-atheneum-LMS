@@ -84,9 +84,13 @@ body{
 
 .btn-sec{
     margin-top: 5rem;
+  
 }
 .btn-1{
-    justify-self: center;
+    margin-top: 2rem;
+    justify-content: center;
+    align-items: center;
+    text-align: center; 
 }
 
 .btn-1 button{
@@ -174,11 +178,21 @@ body{
     .sec-section .body-heading h1{
         color: var(--heading-color);
         justify-self: center;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
         font-size: 30px;
     }
 
     .sec-section .body-heading p{
         color: var(--content-color);
+        font-size: 18px;
+        margin-top: 10px;
+        margin-bottom: 20px;
+        justify-self: center;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
     }
 
     .features-section {

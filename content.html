@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Course Content — Maths</title>
+
+  <!-- styles -->
+  <link rel="stylesheet" href="content.css">
+  <!-- icons -->
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+  <!-- Top nav -->
+  <header class="topnav">
+    <div class="brand">
+      <img src="./Images/Logo/Smart_Atheneum_2ND_option-removebg-preview.png" alt="Logo" class="logo">
+      <div class="brand-text">
+        <div class="title">Smart Atheneum</div>
+        <div class="subtitle">Teacher Portal</div>
+      </div>
+    </div>
+
+    <div class="nav-actions">
+      <div class="notification-wrapper">
+        <i class="fa-regular fa-bell"></i>
+        <span class="badge">0</span>
+        <div class="notification-dropdown">No messages yet</div>
+      </div>
+
+      <div class="profile-wrapper">
+        <div class="profile-circle">
+            <i class='bx bx-user'></i>
+        </div>
+        <div class="profile-dropdown">
+          <a href="#">Go to Profile</a>
+          <a href="login-teach.html">Logout</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- page layout-->
+  <div class="page">
+    <aside class="sidebar">
+      <h3>Subjects</h3>
+      <ul>
+        <li><i class="fas fa-calculator"></i> Mathematics</li>
+        <li><i class="fas fa-square-root-alt"></i> Maths Literacy</li>
+        <li><i class="fas fa-landmark"></i> History</li>
+        <li><i class="fas fa-file-invoice-dollar"></i> Accounting</li>
+        <li><i class="fas fa-globe"></i> Geography</li>
+        <li><i class="fas fa-seedling"></i> Agricultural Science</li>
+        <li><i class="fas fa-plane"></i> Tourism</li>
+        <li><i class="fas fa-atom"></i> Physical Science</li>
+        <li><i class="fas fa-dna"></i> Life Sciences</li>
+      </ul>
+      <button class="btn-back-dash"><a href="teach-dash.html">Back to dashboard</a></button>
+    </aside>
+    <!-- main content -->
+    <main class="main-area">
+      <!-- header: subject + topic -->
+      <section class="course-header">
+        <h1 class="subject-title">Mathematics</h1>
+
+        <div class="topic-row">
+          <input id="topicInput" type="text" placeholder="Enter topic (optional)..." />
+          <textarea id="contentInput" rows="4" placeholder="Write content/notes/instructions for this topic..."></textarea>
+          <div class="save-row">
+            <button id="saveBtn" class="btn btn-save" disabled>Save Content</button>
+            <div class="save-hint">Save will remain disabled until you type something in the content field.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Uploads / recording area -->
+      <section class="materials">
+        <h2>Lesson Materials & Uploads</h2>
+
+        <div class="material-grid">
+          <!-- Textbook -->
+          <div class="card">
+            <h3>Upload Textbook</h3>
+            <div class="card-actions">
+              <button class="btn" data-upload-type="textbook" data-source="device">📂 From Device</button>
+              <button class="btn-outline" data-upload-type="textbook" data-source="cloud">☁️ From Cloud</button>
+            </div>
+            <ul class="uploaded-list" id="textbookList"></ul>
+          </div>
+
+          <!-- Past exams -->
+          <div class="card">
+            <h3>Upload Past Exams</h3>
+            <div class="card-actions">
+              <button class="btn" data-upload-type="exam" data-source="device">📂 From Device</button>
+              <button class="btn-outline" data-upload-type="exam" data-source="cloud">☁️ From Cloud</button>
+            </div>
+            <ul class="uploaded-list" id="examList"></ul>
+          </div>
+
+          <!-- Videos -->
+          <div class="card">
+            <h3>Upload Video</h3>
+            <div class="card-actions">
+              <button class="btn" data-upload-type="video" data-source="device">📂 From Device</button>
+              <button class="btn-outline" data-upload-type="video" data-source="cloud">☁️ From Cloud</button>
+            </div>
+            <div id="videoPreviewArea" class="preview-area"></div>
+            <ul class="uploaded-list" id="videoList"></ul>
+          </div>
+
+          <!-- Recorder -->
+          <div class="card">
+            <h3>Voice Recording</h3>
+            <div class="rec-row">
+              <button id="recBtn" class="btn-rec"><i class="fa-solid fa-microphone"></i> Record</button>
+              <button id="stopRecBtn" class="btn" disabled><i class="fa-solid fa-stop"></i> Stop</button>
+              <span id="recTimer" class="rec-timer">00:00</span>
+            </div>
+            <div id="recordingsArea" class="preview-area"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- fixed recent activities sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h3>Recent Activities</h3>
+        <small id="activityCount">0</small>
+      </div>
+
+      <ul id="recentList" class="recent-list">
+        <!-- dynamic content -->
+      </ul>
+    </aside>
+  </div>
+
+  <!-- shared hidden file input used for device uploads -->
+  <input id="filePicker" type="file" style="display:none" />
+
+  <!-- Cloud picker modal (simulated) -->
+  <div id="cloudModal" class="modal">
+    <div class="modal-box">
+      <button class="modal-close" id="cloudClose">&times;</button>
+      <h3>Choose cloud source</h3>
+      <div class="cloud-buttons">
+        <button id="pickDrive" class="btn-cloud"><i class="fa-brands fa-google-drive"></i> Google Drive (simulate)</button>
+        <button id="pickDropbox" class="btn-cloud"><i class="fa-brands fa-dropbox"></i> Dropbox (simulate)</button>
+      </div>
+      <p class="muted">This demo simulates cloud selection — it will open your local file picker to attach a file. Real Drive/Dropbox integration requires API setup.</p>
+    </div>
+  </div>
+
+  <!-- scripts -->
+  <script src="content.js"></script>
+</body>
+</html>
