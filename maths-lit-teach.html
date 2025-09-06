@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Maths Literacy - Manage Course</title>
-  <link rel="stylesheet" href="../../teach-dash.css"/>
+  <link rel="stylesheet" href="teach-dash.css"/>
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 </head>
@@ -21,7 +21,15 @@
         </div>
         <div class="user-controls">
           <div class="profile-wrapper">
-            <div class="profile-circle"><i class='bx bx-user'></i></div>
+            <div class="profile-circle">
+              <i class='bx bx-user'></i>
+            </div>
+            <div class="profile-dropdown">
+             <ul>
+                <li><a href="#">Go to Profile</a></li>
+                <li><a href="login-teach.html">Logout</a></li>
+            </ul>
+           </div> 
           </div>
         </div>
       </div>
@@ -48,7 +56,11 @@
       <div class="empty">No activity yet.</div>
     </aside>
   </main>
+  <section class="back-btn">
+    <a href="teach-dash.html"><i class="fa-solid fa-arrow-left"></i> Back to Dashboard</a>
 
-  <script src="../../teach-dash.js"></script>
+  </section>
+
+  <script src="teach-dash.js"></script>
 </body>
 </html>

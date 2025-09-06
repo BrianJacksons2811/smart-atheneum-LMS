@@ -257,7 +257,7 @@ body{
 }
 
 /* Hero */
-.hero{padding:48px 24px 10px; text-align:center}
+.hero{padding:48px 24px 10px; text-align:center; margin-top: 2rem;}
 .hero h1{font-size:36px;font-weight:800;letter-spacing:.3px;margin:0}
 .hero h1 span{color:#c4b5fd}
 .hero p{color:var(--muted);margin-top:8px}
@@ -355,6 +355,21 @@ body{
 .upload-row{display:flex;gap:10px;flex-wrap:wrap}
 .cloud-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .cloud{display:flex;align-items:center;justify-content:center;gap:8px}
+
+.cloud input{width:16px;height:16px;cursor:pointer}
+.cloud label{cursor:pointer}  
+/* Show modal */
+.modal.show{display:flex}
+
+.back-btn{
+  max-width:1200px;margin:0 auto 20px;padding:0 12px
+}
+.back-btn a{
+  text-decoration:none;color:var(--primary);font-weight:600;
+  display:inline-flex;align-items:center;gap:8px
+} 
+.back-btn a i{font-size:18px}
+
 
 /* Responsive */
 @media (max-width: 1000px){
