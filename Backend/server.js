@@ -42,7 +42,7 @@ const connectWithRetry = async () => {
     });
     
   } catch (error) {
-    console.error('❌ MongoDB connection failed:', error.message);
+    console.error('❌ MongoDB connection failed:', error);
     console.log('🔍 Error details:');
     
     // Specific error handling

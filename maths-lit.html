@@ -3,57 +3,57 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mathematics Lessons</title>
+  <title>Mathematical Literacy Lessons</title>
 
-  <!-- Base site styles (already in your project) -->
+  <!-- Base site styles -->
   <link rel="stylesheet" href="home.css">
   <link rel="stylesheet" href="lessons.css">
 
   <!-- Page-specific styles -->
-  <link rel="stylesheet" href="math-lessons.css">
+  <link rel="stylesheet" href="maths-lit-lessons.css">
 
   <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 </head>
 <body>
   <div class="lessons-container">
     <div class="header">
-      <h1>Mathematics Lessons</h1>
+      <h1>Mathematical Literacy</h1>
       <p id="enrolText">0 students enrolled</p>
     </div>
 
     <!-- Google Drive -->
     <div class="section-title"><i class='bx bx-cloud'></i><h2>Google Drive Resources</h2></div>
     <div class="drive-embed" id="driveBox"
-         data-drive-folder="1d7iF551FqLPWbSaKG5noEEdR5Blt5Vxx">
+         data-drive-folder="REPLACE_WITH_MATHS_LIT_FOLDER_ID">
       <iframe id="driveFrame" loading="lazy"></iframe>
     </div>
 
-    <!-- Uploaded Materials (from your API when DB is linked) -->
+    <!-- Uploaded Materials (API-linked) -->
     <div class="section-title"><i class='bx bx-collection'></i><h2>Uploaded Materials</h2></div>
     <div id="contentGrid" class="cards"></div>
     <p id="contentEmpty" class="empty" style="display:none;">No materials yet.</p>
 
-    <!-- Your core lesson cards (keep as is) -->
+    <!-- Core lessons -->
     <div class="section-title" style="margin-top:32px;"><i class='bx bx-book-open'></i><h2>Core Lessons</h2></div>
     <div class="cards">
       <div class="lesson-card">
-        <h3>Algebra Fundamentals</h3>
-        <p>Learn about variables, equations, and basic algebraic operations.</p>
+        <h3>Financial Mathematics</h3>
+        <p>Simple/compound interest, budgets, tariffs, and inflation.</p>
         <button>Start Lesson</button>
       </div>
       <div class="lesson-card">
-        <h3>Geometry Basics</h3>
-        <p>Explore shapes, angles, and geometric proofs.</p>
+        <h3>Measurement & Maps</h3>
+        <p>Scales, units, conversions, perimeter, area, and volume.</p>
         <button>Start Lesson</button>
       </div>
       <div class="lesson-card">
-        <h3>Trigonometry</h3>
-        <p>Understand sine, cosine, tangent and their applications.</p>
+        <h3>Data Handling</h3>
+        <p>Collecting data, graphs, averages, and interpreting reports.</p>
         <button>Start Lesson</button>
       </div>
       <div class="lesson-card">
-        <h3>Calculus Introduction</h3>
-        <p>Discover limits, derivatives, and integrals.</p>
+        <h3>Probability in Context</h3>
+        <p>Basic probability and risk in everyday situations.</p>
         <button>Start Lesson</button>
       </div>
     </div>

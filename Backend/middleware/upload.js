@@ -38,7 +38,7 @@ const storage = multer.diskStorage({
         uploadPath += 'other/';
     }
     
-    // Create directory if it doesn't exist
+    
     if (!fs.existsSync(uploadPath)) {
       fs.mkdirSync(uploadPath, { recursive: true });
     }
@@ -46,7 +46,7 @@ const storage = multer.diskStorage({
     cb(null, uploadPath);
   },
   filename: (req, file, cb) => {
-    // Generate unique filename
+    
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
     cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
   }
@@ -108,10 +108,4 @@ module.exports = {
   uploadExam,
   uploadVideo,
   uploadRecording
-};const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const express = require('express');
-const router = express.Router();
-const { auth, requireRole } = require('../middleware/auth');
-const User = require('../models/User');
+};

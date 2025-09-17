@@ -6,54 +6,54 @@
   <title>Smart Atheneum LMS — Teacher Portal</title>
   <link rel="stylesheet" href="teach-dash.css"/>
   <!-- Icons -->
- <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 </head>
 <body>
   <!-- Top Nav -->
   <header class="topnav">
-     <div class="container">
-        <header>
-            <div class="nav-container">
-            <div class="nav-bar">
-              <div class="logo-container">
-               <img src="./Images/Logo/Smart_Atheneum_2ND_option-removebg-preview.png" alt="Smart Atheneum Logo" class="logo-img">
-              <div class="logo-text">
-                <h1>Smart Atheneum</h1>
-                <p>Teacher Portal</Portal></p>
-            </div>
-           </div>
-               <div class="user-controls">
-               <div class="notification-wrapper">
-                    <i class='bx bx-bell'></i>
-                    <span class="notification-badge">0</span>
-                      <div class="notification-dropdown">
-                        <p>No messages yet</p>
-                      </div>
-                    </div>
-                 <div class="profile-wrapper">
-                   <div class="profile-circle">
-                     <i class='bx bx-user'></i>
-                  </div>
-                <div class="profile-dropdown">
-                   <ul>
-                     <li><a href="#">Go to Profile</a></li>
-                     <li><a href="login-teach.html">Logout</a></li>
-                   </ul>
-                  </div>
-               </div>
+    <div class="container">
+      <div class="nav-container">
+        <div class="nav-bar">
+          <div class="logo-container">
+            <img src="./Images/Logo/Smart_Atheneum_2ND_option-removebg-preview.png" alt="Smart Atheneum Logo" class="logo-img">
+            <div class="logo-text">
+              <h1>Smart Atheneum</h1>
+              <p>Teacher Portal</p>
             </div>
           </div>
-         </div>
+          <div class="user-controls">
+            <div class="notification-wrapper">
+              <i class='bx bx-bell'></i>
+              <span class="notification-badge">0</span>
+              <div class="notification-dropdown">
+                <p>No messages yet</p>
+              </div>
+            </div>
+            <div class="profile-wrapper">
+              <div class="profile-circle">
+                <i class='bx bx-user'></i>
+              </div>
+              <div class="profile-dropdown">
+                <ul>
+                  <li><a href="#">Go to Profile</a></li>
+                  <li><a href="login-teach.html">Logout</a></li>
+                </ul>
+              </div>
+            </div>
+          </div><!-- user-controls -->
+        </div><!-- nav-bar -->
+      </div><!-- nav-container -->
+    </div><!-- container -->
   </header>
 
   <!-- Hero / Welcome -->
   <section class="hero">
-    <h1>Welcome back, <span>Dr. Williams</span></h1>
+    <h1>Welcome back, <span id="welcomeName">Teacher</span></h1>
     <p>Manage your courses, create assignments, and organize great learning experiences.</p>
   </section>
 
-  <!-- Quick Actions (card with 3 equal actions like screenshot) -->
+  <!-- Quick Actions -->
   <section class="quick-card">
     <div class="quick-title">
       <i class="fa-solid fa-plus"></i>
@@ -62,28 +62,27 @@
     <div class="quick-grid">
       <button id="qa-create" class="quick-item">
         <i class="fa-solid fa-file-circle-plus"></i>
-        <span>Create Assignment</span>
+        <span>Add Content</span>
       </button>
-      <button id="qa-schedule" class="quick-item">
+      <button id="qa-schedule" class="quick-item" data-open="#modal-schedule">
         <i class="fa-regular fa-calendar"></i>
         <span>Schedule Class</span>
       </button>
-      <button id="qa-grade" class="quick-item">
+      <button id="qa-grade" class="quick-item" data-open="#modal-grade">
         <i class="fa-regular fa-clock"></i>
         <span>Grade Submissions</span>
       </button>
     </div>
   </section>
 
-  <!-- Main two-column layout: Subjects (left) + Recent Activity (right) -->
+  <!-- Main two-column layout -->
   <main class="main-grid">
     <!-- Subjects -->
     <section class="panel subjects">
       <h2>Your Subjects</h2>
-
       <div class="subject-grid">
-        <!-- Each subject card -->
-        <article class="subject-card">
+        <!-- Subject cards -->
+        <article class="subject-card" data-subject="Mathematics">
           <div class="pill">Grade 8–12</div>
           <div class="subject-head">
             <div class="icon-badge gradient-orange"><i class="fa-solid fa-calculator"></i></div>
@@ -95,7 +94,7 @@
           <button class="btn-grad" onclick="goToCourse('Mathematics-tech')">Manage Course</button>
         </article>
 
-        <article class="subject-card">
+        <article class="subject-card" data-subject="Maths Literacy">
           <div class="pill">Grade 8–12</div>
           <div class="subject-head">
             <div class="icon-badge gradient-purple"><i class="fa-solid fa-square-root-variable"></i></div>
@@ -107,7 +106,7 @@
           <button class="btn-grad" onclick="goToCourse('Maths Literacy')">Manage Course</button>
         </article>
 
-        <article class="subject-card">
+        <article class="subject-card" data-subject="History">
           <div class="pill">Grade 8–12</div>
           <div class="subject-head">
             <div class="icon-badge gradient-blue"><i class="fa-solid fa-landmark"></i></div>
@@ -119,7 +118,7 @@
           <button class="btn-grad" onclick="goToCourse('History')">Manage Course</button>
         </article>
 
-        <article class="subject-card">
+        <article class="subject-card" data-subject="Accounting">
           <div class="pill">Grade 8–12</div>
           <div class="subject-head">
             <div class="icon-badge gradient-pink"><i class="fa-solid fa-file-invoice-dollar"></i></div>
@@ -131,7 +130,7 @@
           <button class="btn-grad" onclick="goToCourse('Accounting')">Manage Course</button>
         </article>
 
-        <article class="subject-card">
+        <article class="subject-card" data-subject="Geography">
           <div class="pill">Grade 8–12</div>
           <div class="subject-head">
             <div class="icon-badge gradient-cyan"><i class="fa-solid fa-earth-africa"></i></div>
@@ -143,7 +142,7 @@
           <button class="btn-grad" onclick="goToCourse('Geography')">Manage Course</button>
         </article>
 
-        <article class="subject-card">
+        <article class="subject-card" data-subject="Agricultural Science">
           <div class="pill">Grade 8–12</div>
           <div class="subject-head">
             <div class="icon-badge gradient-green"><i class="fa-solid fa-wheat-awn"></i></div>
@@ -155,7 +154,7 @@
           <button class="btn-grad" onclick="goToCourse('Agricultural Science')">Manage Course</button>
         </article>
 
-        <article class="subject-card">
+        <article class="subject-card" data-subject="Tourism">
           <div class="pill">Grade 8–12</div>
           <div class="subject-head">
             <div class="icon-badge gradient-teal"><i class="fa-solid fa-plane-departure"></i></div>
@@ -167,7 +166,7 @@
           <button class="btn-grad" onclick="goToCourse('Tourism')">Manage Course</button>
         </article>
 
-        <article class="subject-card">
+        <article class="subject-card" data-subject="Physical Science">
           <div class="pill">Grade 8–12</div>
           <div class="subject-head">
             <div class="icon-badge gradient-orange"><i class="fa-solid fa-flask"></i></div>
@@ -179,7 +178,7 @@
           <button class="btn-grad" onclick="goToCourse('Physical Science')">Manage Course</button>
         </article>
 
-        <article class="subject-card">
+        <article class="subject-card" data-subject="Life Sciences">
           <div class="pill">Grade 8–12</div>
           <div class="subject-head">
             <div class="icon-badge gradient-lime"><i class="fa-solid fa-dna"></i></div>
@@ -193,31 +192,49 @@
       </div>
     </section>
 
-    <!-- Recent Activity sidebar (empty placeholder like screenshot style) -->
+    <!-- Recent Activity -->
     <aside class="panel activity">
       <h2>Recent Activity</h2>
-      <ul class="activity-list">
-        <!-- Empty for now -->
-      </ul>
-      <div class="empty">No activity yet.</div>
+      <ul class="activity-list" id="activityList"></ul>
+      <div class="empty" id="activityEmpty">No activity yet.</div>
     </aside>
   </main>
 
   <!-- Modals -->
-  <!-- Create Assignment -->
+  <!-- Add Content (device/drive/dropbox) -->
   <div id="modal-assignment" class="modal">
     <div class="modal-box">
       <button class="close" data-close>&times</button>
-      <h3>Create Assignment</h3>
+      <h3>Add Content</h3>
+
+      <label class="field">
+        <span>Subject</span>
+        <select id="as-subject">
+          <option>Mathematics</option>
+          <option>Maths Literacy</option>
+          <option>History</option>
+          <option>Accounting</option>
+          <option>Geography</option>
+          <option>Agricultural Science</option>
+          <option>Tourism</option>
+          <option>Physical Science</option>
+          <option>Life Sciences</option>
+        </select>
+      </label>
+
+      <label class="field">
+        <span>Topic</span>
+        <input id="as-topic" type="text" placeholder="e.g., Financial Accounting / Algebra / Soil Science"/>
+      </label>
 
       <label class="field">
         <span>Title</span>
-        <input id="as-title" type="text" placeholder="e.g., Term 1 Project"/>
+        <input id="as-title" type="text" placeholder="e.g., IFRS 15 Overview / Quadratic Functions"/>
       </label>
 
       <label class="field">
         <span>Description</span>
-        <textarea id="as-desc" rows="4" placeholder="Short description"></textarea>
+        <textarea id="as-desc" rows="3" placeholder="Short description (optional)"></textarea>
       </label>
 
       <div class="upload-choice">
@@ -233,12 +250,12 @@
       </div>
 
       <div class="actions">
-        <button class="btn-grad" id="save-assignment">Save Assignment</button>
+        <button class="btn-grad" id="save-assignment">Save</button>
       </div>
     </div>
   </div>
 
-  <!-- Schedule Class (placeholder modal to match flow) -->
+  <!-- Schedule Class -->
   <div id="modal-schedule" class="modal">
     <div class="modal-box">
       <button class="close" data-close>&times</button>
@@ -252,41 +269,52 @@
         <input type="datetime-local"/>
       </label>
       <div class="actions">
-        <button class="btn-grad">Save</button>
+        <button class="btn-grad" data-close>Save</button>
       </div>
     </div>
   </div>
 
-  <!-- Grade Submissions (placeholder) -->
+  <!-- Grade Submissions -->
   <div id="modal-grade" class="modal">
     <div class="modal-box">
       <button class="close" data-close>&times</button>
       <h3>Grade Submissions</h3>
       <p class="muted">No submissions yet.</p>
       <div class="actions">
-        <button class="btn">Close</button>
+        <button class="btn" data-close>Close</button>
       </div>
     </div>
   </div>
 
-  <!-- Cloud Options modal -->
+  <!-- Cloud Options modal (replaced placeholders with real forms) -->
   <div id="modal-cloud" class="modal">
     <div class="modal-box">
       <button class="close" data-close>&times</button>
       <h3>Upload from Cloud</h3>
-      <div class="cloud-grid">
-        <button class="btn cloud">
-          <i class="fa-brands fa-google-drive"></i> Google Drive (Placeholder)
-        </button>
-        <button class="btn cloud">
-          <i class="fa-brands fa-dropbox"></i> Dropbox (Placeholder)
-        </button>
+      <div class="cloud-grid" style="gap:16px;">
+        <!-- Google Drive -->
+        <div class="cloud card">
+          <h4><i class="fa-brands fa-google-drive"></i> Google Drive</h4>
+          <label class="field">
+            <span>Drive link</span>
+            <input id="drive-link" type="url" placeholder="https://drive.google.com/file/d/FILE_ID/view?usp=sharing"/>
+          </label>
+          <button class="btn" id="btn-save-drive">Save from Drive</button>
+        </div>
+        <!-- Dropbox -->
+        <div class="cloud card">
+          <h4><i class="fa-brands fa-dropbox"></i> Dropbox</h4>
+          <label class="field">
+            <span>Dropbox link</span>
+            <input id="dropbox-link" type="url" placeholder="https://www.dropbox.com/s/xxx/file.pdf?dl=0"/>
+          </label>
+          <button class="btn" id="btn-save-dropbox">Save from Dropbox</button>
+        </div>
       </div>
     </div>
   </div>
 
   <input id="hidden-file" type="file" hidden />
 
+  <!-- Your existing page JS -->
   <script src="teach-dash.js"></script>
-</body>
-</html>

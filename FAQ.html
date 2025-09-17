@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FAQ – Smart Atheneum</title>
+  <link rel="stylesheet" href="faq.css">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+  <!-- Navbar -->
+  <div class="nav-container">
+    <div class="nav-bar">
+      <div class="logo-container">
+        <img src="./Images/Logo/Smart_Atheneum_2ND_option-removebg-preview.png" alt="Smart Atheneum Logo" class="logo-img">
+        <div class="logo-text">
+          <h1>Smart Atheneum</h1>
+          <p>Learning Management System</p>
+        </div>
+      </div>
+      <div class="nav-menu-list">
+        <a class="Student-btn" href="login.html">Student Portal</a>
+        <a class="Teacher-btn" href="login-teach.html">Teacher Portal</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ Section -->
+  <section class="faq-section">
+    <h1>Frequently Asked Questions</h1>
+    <p class="faq-intro">Find answers to common questions about Smart Atheneum.</p>
+
+    <div class="faq-container">
+
+      <!-- FAQ Item 1 -->
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>What is Smart Atheneum?</span>
+          <i class='bx bx-chevron-down'></i>
+        </button>
+        <div class="faq-answer">
+          <p>Smart Atheneum is an AI-powered learning management system designed to support both students and educators with personalized learning, curriculum coverage, and real-time analytics.</p>
+        </div>
+      </div>
+
+      <!-- FAQ Item 2 -->
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>How do students access the platform?</span>
+          <i class='bx bx-chevron-down'></i>
+        </button>
+        <div class="faq-answer">
+          <p>Students can log in via the Student Portal using their assigned credentials. Once logged in, they can access lessons, assignments, and performance reports.</p>
+        </div>
+      </div>
+
+      <!-- FAQ Item 3 -->
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>Is there a portal for teachers?</span>
+          <i class='bx bx-chevron-down'></i>
+        </button>
+        <div class="faq-answer">
+          <p>Yes. Teachers can log in via the Teacher Portal to upload resources, track student progress, and provide feedback through interactive dashboards.</p>
+        </div>
+      </div>
+
+      <!-- FAQ Item 4 -->
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>Can Smart Atheneum work offline?</span>
+          <i class='bx bx-chevron-down'></i>
+        </button>
+        <div class="faq-answer">
+          <p>While Smart Atheneum is primarily cloud-based, certain features such as downloaded resources and offline practice exercises can be accessed without internet connection.</p>
+        </div>
+      </div>
+
+      <!-- FAQ Item 5 -->
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>How do I get technical support?</span>
+          <i class='bx bx-chevron-down'></i>
+        </button>
+        <div class="faq-answer">
+          <p>You can visit our Help Center, explore video tutorials, or contact our support team directly for assistance.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-section">
+        <h3>Subjects</h3>
+        <ul class="footer-links">
+          <li><a href="mathematics-lessons.html">Mathematics</a></li>
+          <li><a href="science-lessons.html">Physical Sciences</a></li>
+          <li><a href="literacy-lessons.html">Mathematical Literacy</a></li>
+          <li><a href="life-sciences-lessons.html">Life Sciences</a></li>
+          <li><a href="history-lessons.html">History</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>Support</h3>
+        <ul class="footer-links">
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="help-center.html">Help Center</a></li>
+          <li><a href="tutorials.html">Video Tutorials</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-bottom-content">
+        <p>&copy; 2025 Smart Atheneum LMS. All rights reserved.</p>
+        <div class="legal-links">
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // FAQ Accordion Script
+    document.querySelectorAll(".faq-question").forEach(button => {
+      button.addEventListener("click", () => {
+        const faqItem = button.parentElement;
+        faqItem.classList.toggle("active");
+      });
+    });
+  </script>
+</body>
+</html>

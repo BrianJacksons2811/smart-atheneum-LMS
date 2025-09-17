@@ -47,6 +47,6 @@ const activitySchema = new mongoose.Schema({
 activitySchema.index({ user: 1, createdAt: -1 });
 activitySchema.index({ type: 1, createdAt: -1 });
 
-userSchema.plugin(mongoosePaginate);
+activitySchema.plugin(mongoosePaginate);
 
 module.exports = mongoose.model('Activity', activitySchema);

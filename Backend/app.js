@@ -1,8 +1,13 @@
+require('dotenv').config();
+
+console.log({
+  cwd: process.cwd(),
+  __dirname,
+  envSeen: !!process.env.MONGODB_URI
+})
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-require('dotenv').config();
-
 // Import routes
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
@@ -47,4 +52,12 @@ app.use('*', (req, res) => {
   res.status(404).json({ message: 'Route not found' });
 });
 
+app.use('/api/uploads', uploadRoutes);
+
 module.exports = app;
+
+// near your other imports
+const contentFileRoutes = require('./routes/content');
+
+// after app.use(express.json(...)) etc.
+app.use('/api/content', contentFileRoutes);

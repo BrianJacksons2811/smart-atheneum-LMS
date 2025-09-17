@@ -1,7 +1,7 @@
 const Content = require('../models/Content');
 const File = require('../models/File');
 const Activity = require('../models/Activity');
-const { validationResult } = require('express-validator');
+const  validationResult = require('express-validator');
 
 // Create new content
 exports.createContent = async (req, res) => {

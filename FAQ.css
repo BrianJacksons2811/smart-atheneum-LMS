@@ -1,0 +1,191 @@
+/* faq.css */
+
+/* Fallbacks in case home.css isn't loaded for some reason */
+:root{
+  --primary-color:#0d0113;
+  --second-color:#9a25d4;
+  --background-color-btn:#a855f7;
+  --heading-color:#ececec;
+  --content-color:#a7a7a7;
+  --border-color:rgba(107,17,203,0.19);
+}
+
+/* Page background to match home */
+body{
+  margin:0;
+  color:var(--heading-color);
+  background:
+    radial-gradient(1200px 800px at -10% -20%, rgba(154,37,212,.25), transparent 60%),
+    radial-gradient(900px 600px at 110% 0%, rgba(168,85,247,.18), transparent 55%),
+    linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0) 35%);
+  background-color:var(--primary-color);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+/* Navbar spacing consistency */
+.nav-container {
+    position: fixed;    
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: transparent;
+    backdrop-filter: blur(10px);       
+    -webkit-backdrop-filter: blur(10px); 
+    z-index: 1000; 
+    border-bottom: 1px solid #3b3b3b;
+  
+}
+
+.nav-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    border-bottom: 1px solid var(--line-color);
+
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px; 
+    margin-left: 20rem;
+}
+
+.logo-img {
+    width: 60px;  
+    height: auto;
+}
+
+.logo-text h1 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: bold;
+    color: #a855f7; 
+}
+
+.logo-text p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--sub-tittle-color);
+}
+
+.nav-menu-list{
+    padding-right: 15%;
+}
+
+.nav-menu-list a{
+     padding: 10px;
+     border: 1px solid var(--border-color);
+     border-radius: 5px;
+     cursor: pointer;
+     text-decoration: none;
+     color: azure;
+}
+.Student-btn:hover{
+    background-color: #6b11cb1f;
+    transition: .6s ease;
+}
+.Teacher-btn{
+   background-color: var(--background-color-btn);
+}
+
+/* FAQ Section */
+.faq-section{
+  max-width:1100px;
+  margin:56px auto 80px;
+  padding:0 24px;
+}
+
+.faq-section h1{
+  font-size:clamp(28px, 3vw, 40px);
+  margin:84px 0 8px;
+  color:var(--heading-color);
+}
+
+.faq-intro{
+  margin:0 0 28px;
+  color:var(--content-color);
+}
+
+/* Container grid */
+.faq-container{
+  display:grid;
+  gap:14px;
+}
+
+/* Glass/neo cards */
+.faq-item{
+  border:1px solid var(--border-color);
+  border-radius:16px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.05) inset,
+    0 10px 30px rgba(168,85,247,.06);
+  overflow:hidden;
+}
+
+/* Question button */
+.faq-question{
+  width:100%;
+  display:flex; align-items:center; justify-content:space-between;
+  background:transparent; color:var(--heading-color);
+  border:0; outline:none; cursor:pointer;
+  padding:18px 20px;
+  font-size:16px; font-weight:600;
+  transition:background .2s ease;
+}
+.faq-question:hover{ background:rgba(168,85,247,.08); }
+
+.faq-question i{
+  font-size:22px; color:#c084fc; transition:transform .25s ease;
+}
+
+/* Answer (animated open/close) */
+.faq-answer{
+  max-height:0; overflow:hidden;
+  padding:0 20px;
+  transition:max-height .35s ease, padding .25s ease;
+  color:var(--content-color);
+  line-height:1.6;
+}
+.faq-item.active .faq-answer{
+  max-height:320px; /* plenty for 2–3 paragraphs */
+  padding:0 20px 18px;
+}
+.faq-item.active .faq-question i{ transform:rotate(180deg); }
+
+/* Footer keep-on-brand */
+.site-footer{
+  margin-top:64px;
+  border-top:1px solid var(--border-color);
+  background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0));
+}
+.footer-container{
+  max-width:1100px; margin:0 auto; padding:28px 24px;
+  display:grid; gap:22px; grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+}
+.footer-section h3{ margin:0 0 10px; color:#eaeaea; }
+.footer-links{ list-style:none; margin:0; padding:0; }
+.footer-links a{
+  color:var(--content-color); text-decoration:none;
+  display:inline-block; padding:6px 0;
+}
+.footer-links a:hover{ color:#d8b4fe; }
+.footer-bottom{
+  border-top:1px solid var(--border-color);
+  color:var(--content-color);
+}
+.footer-bottom-content{
+  max-width:1100px; margin:0 auto; padding:14px 24px;
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+}
+.legal-links a{ color:var(--content-color); text-decoration:none; margin-left:14px; }
+.legal-links a:hover{ color:#d8b4fe; }
+
+/* Mobile tweaks */
+@media (max-width:720px){
+  .footer-bottom-content{ flex-direction:column; align-items:flex-start; }
+}

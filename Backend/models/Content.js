@@ -65,6 +65,6 @@ contentSchema.index({ subject: 1, grade: 1 });
 contentSchema.index({ createdBy: 1 });
 contentSchema.index({ tags: 1 });
 
-userSchema.plugin(mongoosePaginate);
+contentSchema.plugin(mongoosePaginate);
 
 module.exports = mongoose.model('Content', contentSchema);
