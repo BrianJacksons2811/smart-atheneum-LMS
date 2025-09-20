@@ -388,3 +388,158 @@ button:hover {
   text-decoration: none;
 }
 
+/* =========================================
+   Responsive layer — Login / Register UIs
+   (Append to END of your existing CSS)
+   ========================================= */
+
+/* Large tablets / small laptops */
+@media (max-width: 1200px) {
+  .wrapper { width: 400px; }
+  .register-card { width: 360px; }
+}
+
+/* Tablets */
+@media (max-width: 992px) {
+  /* Login card */
+  .wrapper {
+    width: 380px;
+    padding: 26px 32px;
+    border-radius: 12px;
+  }
+  .wrapper h1 { font-size: 30px; }
+  .wrapper p  { font-size: 0.95rem; }
+
+  /* Register card */
+  .register-card {
+    width: 340px;
+    padding: 1.6rem;
+    border-radius: 12px;
+  }
+
+  /* Horizontal rows become a bit tighter */
+  .input-row,
+  .form-group { gap: 12px; }
+
+  .back-to-home { margin-left: 0; text-align: center; }
+}
+
+/* Phablets / large phones */
+@media (max-width: 768px) {
+  /* Global body padding so cards don’t kiss the edge */
+  body { padding: 16px; min-height: 100vh; }
+
+  /* Center the top icon on small screens */
+  .first-icon img {
+    margin: 0 auto 10px;
+    width: 56px;
+    display: block;
+  }
+
+  /* Login card */
+  .wrapper {
+    width: min(440px, 92vw);
+    padding: 22px 20px;
+  }
+  .wrapper h1 { font-size: 28px; }
+  .wrapper p  { font-size: 0.95rem; }
+
+  .input-box { height: auto; margin: 20px 0; }
+  .input-box input { padding: 14px 48px 14px 14px; font-size: 15px; }
+  .input-box .toggle-password {
+    right: 10px; width: 36px; height: 36px; font-size: 20px;
+  }
+
+  /* Remember / Forgot stacks */
+  .wrapper .remember-forgot {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    margin: -8px 0 12px;
+    font-size: 14px; /* override the invalid 14,5px */
+  }
+  .remember-forgot label input { width: 18px; height: 18px; }
+
+  .wrapper .btn { height: 48px; border-radius: 40px; }
+
+  .back-to-home {
+    margin-left: 0;
+    text-align: center;
+    padding-top: 12px;
+  }
+  .back-to-home a { justify-content: center; }
+
+  /* Registration (learner/teacher) */
+  .register-container { padding: 8px; }
+  .register-card {
+    width: 92vw;
+    max-width: 440px;
+    padding: 20px;
+    border-radius: 12px;
+  }
+  .icon img { width: 56px; }
+
+  .form-group,
+  .input-row {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  input, select {
+    padding: 0.9rem 0.9rem;
+    font-size: 15px;
+  }
+  .input-box select,
+  .input-box input[type="date"] {
+    padding: 12px 40px 12px 12px;
+    font-size: 14px;
+  }
+
+  button { height: 48px; }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .wrapper {
+    width: 94vw;
+    padding: 20px 16px;
+  }
+  .wrapper h1 { font-size: 26px; }
+  .wrapper p  { font-size: 0.9rem; }
+
+  .input-box input { font-size: 14.5px; padding: 13px 44px 13px 13px; }
+  .input-box .toggle-password { font-size: 19px; width: 32px; height: 32px; }
+
+  .register-card { padding: 18px; }
+  h2 { font-size: 1.25rem; }
+  p  { font-size: 0.9rem; }
+
+  .login-link, .back-link { font-size: 0.9rem; }
+}
+
+/* Small mobile */
+@media (max-width: 480px) {
+  .wrapper { padding: 18px 14px; }
+  .wrapper h1 { font-size: 24px; }
+  .wrapper .btn { height: 46px; }
+
+  .first-icon img { width: 52px; }
+  .register-card { width: 94vw; }
+
+  .back-to-home { padding-top: 10px; }
+  .back-to-home a { font-size: 15px; }
+
+  .remember-forgot {
+    gap: 6px;
+    align-items: flex-start;
+  }
+}
+
+/* Ultra small */
+@media (max-width: 360px) {
+  .wrapper h1 { font-size: 22px; }
+  .input-box input { font-size: 14px; }
+  .input-box .toggle-password { font-size: 18px; width: 30px; height: 30px; }
+  .wrapper .btn, button { height: 44px; }
+}
+

@@ -370,9 +370,219 @@ body{
 } 
 .back-btn a i{font-size:18px}
 
+ /* Footer */
+
+     .site-footer {
+        background-color: var(--second-color);
+        color: #ecf0f1;
+        padding: 40px 0 0;
+        margin-top: 4em;
+        max-width: 100%;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .footer-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 30px;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    .footer-section h3 {
+        color: var(--Footer-color);
+        margin-bottom: 20px;
+        font-size: 1.2rem;
+    }
+
+    .footer-links {
+        list-style: none;
+        padding: 0;
+    }
+
+    .footer-links li {
+        margin-bottom: 10px;
+    }
+
+    .footer-links a {
+        color: #bdc3c7;
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+
+    .footer-links a:hover {
+        color: #0d0113;
+    }
+
+    .footer-bottom {
+        background-color: var(--primary-color);
+        padding: 20px 0;
+        margin-top: 40px;
+    }
+
+    .footer-bottom-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .footer-bottom p {
+        margin: 0;
+        font-size: 0.9rem;
+    }
+
 
 /* Responsive */
 @media (max-width: 1000px){
   .main-grid{grid-template-columns:1fr}
   .subject-grid{grid-template-columns:1fr}
+}
+
+
+/* ======================================================
+   Responsive layer — Teacher Dashboard (nav + hero + grid)
+   Append to the END of your existing stylesheet
+   ====================================================== */
+
+/* ---------- XL → LG tightening ---------- */
+@media (max-width: 1280px) {
+  .quick-card,
+  .main-grid { max-width: 1100px; }
+  .logo-container { margin-left: 10rem; }
+  .logo-img { padding-left: 1.5rem; }
+}
+
+/* ---------- Large tablets / small laptops ---------- */
+@media (max-width: 1100px) {
+  .logo-container { margin-left: 4rem; }
+  .nav-menu-list { padding-right: 6%; }
+
+  .quick-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .main-grid { grid-template-columns: 3fr 2fr; gap: 16px; padding: 0 10px; }
+
+  .subject-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
+  .modal-box { width: min(540px, 92vw); }
+}
+
+/* ---------- Tablets ---------- */
+@media (max-width: 992px) {
+  /* Nav compacts */
+  .nav-bar { padding: 10px 16px; }
+  .logo-container { margin-left: 1rem; gap: 8px; }
+  .logo-img { width: 64px; padding-left: 0; }
+  .logo-text h1 { font-size: 18px; }
+  .logo-text p { font-size: 12px; }
+  .nav-menu-list { padding-right: 0; }
+
+  /* User controls tighter */
+  .user-controls { gap: 16px; padding-right: 0; }
+  .notification-wrapper i { font-size: 22px; }
+  .profile-circle { width: 38px; height: 38px; font-size: 20px; }
+
+  /* Hero */
+  .hero { padding: 70px 16px 10px; }
+  .hero h1 { font-size: 30px; }
+  .hero p { font-size: 0.98rem; }
+
+  /* Cards & grids */
+  .quick-card { margin: 16px auto 22px; padding: 16px; }
+  .main-grid { grid-template-columns: 1fr; gap: 16px; }
+  .subject-grid { grid-template-columns: 1fr 1fr; }
+
+  /* Buttons: comfortable tap targets */
+  .btn-grad { height: 46px; border-radius: 12px; }
+  .btn, .btn-outline { padding: 10px 12px; border-radius: 10px; }
+
+  /* Cloud picker */
+  .cloud-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+}
+
+/* ---------- Phablets / large phones ---------- */
+@media (max-width: 768px) {
+  /* Nav stacks */
+  .nav-bar { flex-direction: column; align-items: center; gap: 10px; }
+  .logo-container { margin-left: 0; }
+  .nav-menu-list { display: flex; gap: 10px; }
+  .nav-menu-list a { padding: 8px 10px; font-size: 14px; }
+
+  .user-controls {
+    width: 100%;
+    justify-content: center;
+    gap: 14px;
+    padding-right: 0;
+  }
+
+  /* Hero scales */
+  .hero { padding: 84px 14px 8px; }
+  .hero h1 { font-size: 26px; }
+
+  /* Quick actions become single column if space is tight */
+  .quick-grid { grid-template-columns: 1fr; gap: 10px; }
+  .quick-item { height: 54px; }
+
+  /* Panels & grids */
+  .panel { padding: 14px; }
+  .subject-grid { grid-template-columns: 1fr; }
+  .activity .empty { padding: 20px; }
+
+  /* Profile & notifications sizes */
+  .profile-circle { width: 36px; height: 36px; font-size: 18px; }
+  .notification-badge { font-size: 10px; padding: 1px 5px; }
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 600px) {
+  /* Global gutters */
+  .container, .main-grid, .back-btn { padding: 0 12px; }
+  .quick-card { padding: 12px; }
+
+  /* Text sizes */
+  .panel h2 { font-size: 18px; }
+  .subject-card h3 { font-size: 16px; }
+  .subject-card p { font-size: 12.5px; }
+
+  /* Subject card spacing */
+  .subject-card { padding: 14px; border-radius: 14px; }
+  .icon-badge { width: 44px; height: 44px; border-radius: 10px; }
+
+  /* Buttons full-width by default */
+  .btn-grad { width: 100%; height: 48px; }
+  .btn, .btn-outline { width: 100%; }
+
+  /* Cloud picker → single column */
+  .cloud-grid { grid-template-columns: 1fr; }
+}
+
+/* ---------- Small mobile ---------- */
+@media (max-width: 480px) {
+  /* Nav trims */
+  .nav-bar { padding: 8px 10px; }
+  .logo-img { width: 56px; }
+  .nav-menu-list a { padding: 7px 9px; font-size: 13px; }
+
+  /* Hero */
+  .hero h1 { font-size: 24px; }
+  .hero p { font-size: 0.94rem; }
+
+  /* Cards compact */
+  .subject-card { padding: 12px; }
+  .pill { padding: 4px 8px; font-size: 11px; }
+
+  /* Modal padding */
+  .modal-box { padding: 14px 12px; }
+  .field { gap: 6px; margin-bottom: 10px; }
+  .field input, .field textarea { padding: 9px 10px; }
+}
+
+/* ---------- Ultra-small devices ---------- */
+@media (max-width: 360px) {
+  .hero h1 { font-size: 22px; }
+  .btn-grad { height: 46px; border-radius: 10px; }
+  .icon-badge { width: 40px; height: 40px; }
+  .back-btn a { font-size: 14px; }
 }

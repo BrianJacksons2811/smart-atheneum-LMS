@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>My Profile</title>
+  <link rel="stylesheet" href="profile.css">
+</head>
+<body>
+  <header class="profile-header">
+    <h1>My Profile</h1>
+  </header>
+
+  <main class="profile-container">
+    <!-- Profile Card -->
+    <section class="profile-card">
+      <div class="pic-container">
+        <img id="profilePic" src="Images/default-avatar.png" alt="Profile Picture">
+        <input type="file" id="uploadPic" accept="image/*" hidden>
+        <button id="uploadBtn" class="btn">Upload Picture</button>
+      </div>
+      <div class="profile-info">
+        <h2 id="username">(No Name Yet)</h2>
+        <p id="email">(No Email Yet)</p>
+        <p><strong>Grade:</strong> <span id="grade">(not set)</span></p>
+        <button id="editBtn" class="btn">Edit Profile</button>
+      </div>
+    </section>
+
+    <!-- Account Info -->
+    <section class="details">
+      <h3>Account Information</h3>
+      <ul>
+        <li><strong>Enrolled Courses:</strong> 0</li>
+        <li><strong>Attendance:</strong> 0%</li>
+      </ul>
+    </section>
+  </main>
+
+  <!-- Edit Profile Modal -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span id="closeModal" class="close">&times;</span>
+      <h2>Edit Profile</h2>
+      <form id="profileForm">
+        <label for="nameInput">Name</label>
+        <input type="text" id="nameInput" required>
+
+        <label for="emailInput">Email</label>
+        <input type="email" id="emailInput" required>
+
+        <label for="gradeInput">Grade</label>
+        <input type="text" id="gradeInput">
+
+        <button type="submit" class="btn">Save</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="profile.js"></script>
+</body>
+</html>

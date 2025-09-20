@@ -6,6 +6,7 @@ console.log({
   envSeen: !!process.env.MONGODB_URI
 })
 const express = require('express');
+const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
 // Import routes
@@ -14,6 +15,14 @@ const userRoutes = require('./routes/users');
 const contentRoutes = require('./routes/content');
 const uploadRoutes = require('./routes/uploads');
 const activityRoutes = require('./routes/activities');
+
+mongoose.set('strictQuery', true); 
+mongoose.Promise = global.Promise;
+mongoose.connect('mongodb+srv://dkhwanie072_db_user:OkkYjmprQueM6KYL@cluster0.oxej4th.mongodb.net/smart-atheneum?retryWrites=true&w=majority', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log('✅ MongoDB connected'))
 
 const app = express();
 
