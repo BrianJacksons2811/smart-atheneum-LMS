@@ -344,3 +344,49 @@ if (dd) {
   if (!currentSubject && dd.value) currentSubject = dd.value.trim();
   dd.addEventListener('change', () => { currentSubject = dd.value.trim(); });
 }
+
+// ---------- Profile dropdown: click for mobile + click-outside close ----------
+(function () {
+  const wrapper = document.querySelector('.profile-wrapper');
+  const trigger = document.querySelector('.profile-circle');
+  const dropdown = document.querySelector('.profile-dropdown');
+
+  if (!wrapper || !trigger || !dropdown) return;
+
+  // Toggle by click (useful for touch/mobile where :hover is unreliable)
+  trigger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    wrapper.classList.toggle('open');
+  });
+
+  // Close when clicking anywhere else
+  document.addEventListener('click', (e) => {
+    if (!wrapper.contains(e.target)) {
+      wrapper.classList.remove('open');
+    }
+  });
+
+  // Keyboard accessibility: open on focus (Tab), close on Shift+Tab away
+  trigger.setAttribute('tabindex', '0');
+  trigger.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      wrapper.classList.toggle('open');
+    }
+    if (e.key === 'Escape') {
+      wrapper.classList.remove('open');
+      trigger.blur();
+    }
+  });
+
+  // Prevent accidental close when moving mouse from icon to menu
+  // (CSS :hover on .profile-wrapper already handles this, but we keep a tiny guard)
+  let leaveTimer = null;
+  wrapper.addEventListener('mouseleave', () => {
+    // small delay feels better and avoids flicker at edges
+    leaveTimer = setTimeout(() => wrapper.classList.remove('open'), 120);
+  });
+  wrapper.addEventListener('mouseenter', () => {
+    if (leaveTimer) clearTimeout(leaveTimer);
+  });
+})();

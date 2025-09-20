@@ -420,7 +420,6 @@ body{
   display: block;
 }
 
-/* Profile Circle */
 .profile-wrapper {
   position: relative;
 }
@@ -429,52 +428,145 @@ body{
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: #64a9f3; 
+  background: linear-gradient(to right, #a855f7, #6366f1);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 22px;
   color: white;
+  font-weight: 600;
   cursor: pointer;
-  border: 2px solid #000;
 }
 
-/* Profile Dropdown */
-.profile-dropdown {
+/* User Controls Wrapper */
+.user-controls {
+  display: flex;
+  align-items: center;
+  padding-right: 5.5rem;
+  gap: 30px;
+  position: relative;
+}
+
+/* Notification Icon */
+.notification-wrapper {
+  position: relative;
+  cursor: pointer;
+}
+
+.notification-wrapper i {
+  font-size: 24px;
+  color: white;
+}
+
+.notification-badge {
+  position: absolute;
+  top: -5px;
+  right: -8px;
+  background: red;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 50%;
+}
+
+/* Notification Dropdown */
+.notification-dropdown {
   display: none;
   position: absolute;
-  top: 50px;
+  top: 30px;
   right: 0;
   background: #222;
   color: white;
+  padding: 10px;
   border-radius: 5px;
-  overflow: hidden;
+  min-width: 150px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  font-size: 14px;
 }
 
+.notification-wrapper:hover .notification-dropdown {
+  display: block;
+}
+
+/* --- Profile dropdown: robust hover + nice motion --- */
+.profile-wrapper {
+  position: relative;
+}
+
+
+.profile-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: box-shadow .2s ease, border-color .2s ease, outline-color .2s ease;
+  border: 1px solid transparent;
+}
+.profile-circle:hover {
+  border: 8px solid #c6aff0;                  /* purple border on hover */
+  box-shadow: 0 8px 24px rgba(124, 58, 237, .25); /* purple-ish glow */
+}
+
+/* Dropdown panel */
+.profile-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 180px;
+  background: #48494950;
+  border-radius: 12px;
+  border: 1px solid rgba(124, 58, 237, 0.0); /* will animate in on hover */
+  box-shadow: 0 10px 30px rgba(0,0,0,.08);
+  padding: 8px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(6px);
+  transition: opacity .16s ease, transform .16s ease, visibility .16s linear, border-color .16s ease, box-shadow .16s ease;
+  z-index: 50;
+  pointer-events: none; /* prevents accidental hover when hidden */
+}
+
+.profile-wrapper:hover .profile-dropdown,
+.profile-wrapper:focus-within .profile-dropdown,
+.profile-wrapper.open .profile-dropdown { /* 'open' is toggled by JS for mobile */
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
+  border-color: #7c3aed; 
+  box-shadow: 0 12px 32px rgba(124, 58, 237, .22);
+}
+
+
+.profile-wrapper::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 100%;
+  height: 10px;      
+  width: 140px;      
+}
+
+/* Dropdown list styling */
 .profile-dropdown ul {
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: 4px;
 }
-
-.profile-dropdown ul li {
-  padding: 10px 20px;
-  border-bottom: 1px solid #333;
-}
-
-.profile-dropdown ul li a {
+.profile-dropdown li a {
+  display: block;
+  padding: 10px 12px;
+  border-radius: 8px;
+  color: #e4e5e6;
   text-decoration: none;
-  color: white;
-  display: block;
+  transition: background-color .15s ease, color .15s ease;
 }
-
-.profile-dropdown ul li:hover {
-  background: #444;
-}
-
-.profile-wrapper:hover .profile-dropdown {
-  display: block;
+.profile-dropdown li a:hover {
+  background: rgba(124, 58, 237, .08);
+  color: #5b21b6;
+  border: 2px solid #7c3aed;
 }
 
     .welcome-section {
@@ -585,6 +677,14 @@ h2 {
   flex-direction: column;
   justify-content: space-between;
 }
+
+.subject-card { position: relative; }
+.subject-card .btn-grad {
+  position: relative;
+  z-index: 2;
+  pointer-events: auto; /* ensure clicks reach the button */
+}
+
 
 .subject-icon {
   font-size: 40px;

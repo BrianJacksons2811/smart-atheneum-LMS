@@ -199,62 +199,87 @@ body{
   display: block;
 }
 
-/* Profile Circle */
+/* --- Profile dropdown: robust hover + nice motion --- */
 .profile-wrapper {
   position: relative;
 }
 
+/* The trigger (circle) – optional hover affordance */
 .profile-circle {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: #64a9f3; 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 22px;
-  color: white;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
   cursor: pointer;
-  border: 2px solid #000;
+  transition: box-shadow .2s ease, border-color .2s ease, outline-color .2s ease;
+  border: 1px solid transparent;
+}
+.profile-circle:hover {
+  border: 8px solid #c6aff0;                  /* purple border on hover */
+  box-shadow: 0 8px 24px rgba(124, 58, 237, .25); /* purple-ish glow */
 }
 
-/* Profile Dropdown */
+/* Dropdown panel */
 .profile-dropdown {
-  display: none;
   position: absolute;
-  top: 50px;
+  top: calc(100% + 8px);
   right: 0;
-  background: #222;
-  color: white;
-  border-radius: 5px;
-  overflow: hidden;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  min-width: 180px;
+  background: #48494950;
+  border-radius: 12px;
+  border: 1px solid rgba(124, 58, 237, 0.0); /* will animate in on hover */
+  box-shadow: 0 10px 30px rgba(0,0,0,.08);
+  padding: 8px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(6px);
+  transition: opacity .16s ease, transform .16s ease, visibility .16s linear, border-color .16s ease, box-shadow .16s ease;
+  z-index: 50;
+  pointer-events: none; /* prevents accidental hover when hidden */
 }
 
+.profile-wrapper:hover .profile-dropdown,
+.profile-wrapper:focus-within .profile-dropdown,
+.profile-wrapper.open .profile-dropdown { /* 'open' is toggled by JS for mobile */
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
+  border-color: #7c3aed; 
+  box-shadow: 0 12px 32px rgba(124, 58, 237, .22);
+}
+
+
+.profile-wrapper::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 100%;
+  height: 10px;      
+  width: 140px;      
+}
+
+/* Dropdown list styling */
 .profile-dropdown ul {
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: 4px;
 }
-
-.profile-dropdown ul li {
-  padding: 10px 20px;
-  border-bottom: 1px solid #333;
-}
-
-.profile-dropdown ul li a {
+.profile-dropdown li a {
+  display: block;
+  padding: 10px 12px;
+  border-radius: 8px;
+  color: #e4e5e6;
   text-decoration: none;
-  color: white;
-  display: block;
+  transition: background-color .15s ease, color .15s ease;
+}
+.profile-dropdown li a:hover {
+  background: rgba(124, 58, 237, .08);
+  color: #5b21b6;
+  border: 2px solid #7c3aed;
 }
 
-.profile-dropdown ul li:hover {
-  background: #444;
-}
-
-.profile-wrapper:hover .profile-dropdown {
-  display: block;
-}
 
 /* Hero */
 .hero{padding:48px 24px 10px; text-align:center; margin-top: 2rem;}
