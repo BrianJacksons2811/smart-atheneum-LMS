@@ -38,7 +38,7 @@ function loadContent(){
       if (!items.length) { empty.style.display = 'block'; return; }
       grid.innerHTML = items.map(renderCard).join('');
     })
-    .catch(() => { /* API not linked yet → leave section blank; Drive still shows */ });
+    .catch(() => {  });
 }
 
 function renderCard(it){
