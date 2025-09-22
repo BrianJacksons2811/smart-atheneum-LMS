@@ -1,52 +1,30 @@
-const mongoosePaginate = require('mongoose-paginate-v2');
-const mongoose = require('mongoose');
+// models/Activity.js (MySQL version)
+const pool = require('../db');
 
-const activitySchema = new mongoose.Schema({
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
+module.exports = {
+  async list({ classroomId = null, limit = 20, offset = 0 } = {}) {
+    const [rows] = await pool.query(
+      `SELECT id, user_id, classroom_id, subject_name, title, type, metadata, created_at
+       FROM activities
+       WHERE (:cid IS NULL OR classroom_id=:cid)
+       ORDER BY created_at DESC
+       LIMIT :limit OFFSET :offset`,
+      { cid: classroomId, limit, offset }
+    );
+    return rows;
   },
-  type: {
-    type: String,
-    required: true,
-    enum: [
-      'content_save', 
-      'file_upload', 
-      'video_upload', 
-      'recording', 
-      'login', 
-      'logout',
-      'content_view',
-      'assignment_submit'
-    ]
+
+  async add({ userId = null, classroomId = null, subjectName = null, title, type, metadata = null }) {
+    const [r] = await pool.query(
+      `INSERT INTO activities (user_id, classroom_id, subject_name, title, type, metadata)
+       VALUES (:uid,:cid,:subj,:title,:type, CAST(:meta AS JSON))`,
+      { uid: userId, cid: classroomId, subj: subjectName, title, type, meta: metadata ? JSON.stringify(metadata) : null }
+    );
+    return r.insertId;
   },
-  title: {
-    type: String,
-    required: true
-  },
-  description: {
-    type: String
-  },
-  resourceType: {
-    type: String,
-    enum: ['content', 'file', 'video', 'recording', 'none']
-  },
-  resourceId: {
-    type: mongoose.Schema.Types.ObjectId
-  },
-  metadata: {
-    type: Map,
-    of: mongoose.Schema.Types.Mixed
+
+  async remove(id) {
+    await pool.query(`DELETE FROM activities WHERE id=:id`, { id });
+    return { ok: true };
   }
-}, {
-  timestamps: true
-});
-
-// Index for efficient querying
-activitySchema.index({ user: 1, createdAt: -1 });
-activitySchema.index({ type: 1, createdAt: -1 });
-
-activitySchema.plugin(mongoosePaginate);
-
-module.exports = mongoose.model('Activity', activitySchema);
+};

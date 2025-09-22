@@ -1,50 +1,38 @@
-const mongoose = require('mongoose');
+// models/File.js 
+const pool = require('../db');
 
-const fileSchema = new mongoose.Schema({
-  filename: {
-    type: String,
-    required: true
+module.exports = {
+  async create({
+    userId, fileName, originalName, mimeType, sizeBytes, fileUrl,
+    provider = 'device'
+  }) {
+    const [r] = await pool.query(
+      `INSERT INTO uploads (user_id,file_name,file_url,mime_type,size_bytes,provider)
+       VALUES (:uid,:name,:url,:mime,:size,:prov)`,
+      { uid: userId, name: originalName || fileName, url: fileUrl, mime: mimeType, size: sizeBytes, prov: provider }
+    );
+    const [rows] = await pool.query(
+      `SELECT id, user_id, file_name, file_url, mime_type, size_bytes, provider, created_at
+       FROM uploads WHERE id=:id`, { id: r.insertId }
+    );
+    return rows[0];
   },
-  originalName: {
-    type: String,
-    required: true
+
+  async listByUser(userId, limit = 100, offset = 0) {
+    const [rows] = await pool.query(
+      `SELECT id, user_id, file_name, file_url, mime_type, size_bytes, provider, created_at
+       FROM uploads
+       WHERE (:uid IS NULL OR user_id=:uid)
+       ORDER BY created_at DESC
+       LIMIT :limit OFFSET :offset`,
+      { uid: userId || null, limit, offset }
+    );
+    return rows;
   },
-  mimetype: {
-    type: String,
-    required: true
-  },
-  size: {
-    type: Number,
-    required: true
-  },
-  path: {
-    type: String,
-    required: true
-  },
-  uploader: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
-  },
-  type: {
-    type: String,
-    enum: ['textbook', 'exam', 'video', 'recording', 'other'],
-    required: true
-  },
-  subject: {
-    type: String,
-    required: true
-  },
-  grade: {
-    type: String,
-    required: true
-  },
-  isPublic: {
-    type: Boolean,
-    default: false
+
+  async remove(id, requester) {
+    
+    await pool.query(`DELETE FROM uploads WHERE id=:id`, { id });
+    return { ok: true };
   }
-}, {
-  timestamps: true
-});
-
-module.exports = mongoose.model('File', fileSchema);
+};

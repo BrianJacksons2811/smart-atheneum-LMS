@@ -1,70 +1,41 @@
-const mongoosePaginate = require('mongoose-paginate-v2');
-const mongoose = require('mongoose');
+// models/Content.js 
+const pool = require('../db');
 
-const contentSchema = new mongoose.Schema({
-  title: {
-    type: String,
-    required: true,
-    trim: true
+module.exports = {
+  // list by classroom 
+  async listByClassroom(classroomId, type = null, limit = 100, offset = 0) {
+    const [rows] = await pool.query(
+      `SELECT id, classroom_id, title, type, description, url, created_by, created_at
+       FROM content_items
+       WHERE classroom_id = :cid AND (:type IS NULL OR type = :type)
+       ORDER BY created_at DESC
+       LIMIT :limit OFFSET :offset`,
+      { cid: classroomId, type, limit, offset }
+    );
+    return rows;
   },
-  topic: {
-    type: String,
-    trim: true
-  },
-  description: {
-    type: String,
-    required: true
-  },
-  subject: {
-    type: String,
-    required: true,
-    enum: [
-      'Mathematics', 
-      'Mathematical Literacy', 
-      'Accounting', 
-      'Physical Sciences',
-      'Tourism', 
-      'Agriculture', 
-      'Geography', 
-      'Life Sciences',
-      'History'
-    ]
-  },
-  grade: {
-    type: String,
-    required: true,
-    enum: ['Grade 8', 'Grade 9', 'Grade 10', 'Grade 11', 'Grade 12']
-  },
-  createdBy: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
-  },
-  files: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'File'
-  }],
-  recordings: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'File'
-  }],
-  isPublished: {
-    type: Boolean,
-    default: false
-  },
-  tags: [{
-    type: String,
-    trim: true
-  }]
-}, {
-  timestamps: true
-});
 
-// Index for better query performance
-contentSchema.index({ subject: 1, grade: 1 });
-contentSchema.index({ createdBy: 1 });
-contentSchema.index({ tags: 1 });
+  // create one content record
+  async create({ classroomId, title, type, description = null, url = null, createdBy = null }) {
+    const [r] = await pool.query(
+      `INSERT INTO content_items (classroom_id,title,type,description,url,created_by)
+       VALUES (:cid,:title,:type,:desc,:url,:uid)`,
+      { cid: classroomId, title, type, desc: description, url, uid: createdBy }
+    );
+    const [rows] = await pool.query(
+      `SELECT id, classroom_id, title, type, description, url, created_by, created_at
+       FROM content_items WHERE id=:id`,
+      { id: r.insertId }
+    );
+    return rows[0];
+  },
 
-contentSchema.plugin(mongoosePaginate);
-
-module.exports = mongoose.model('Content', contentSchema);
+  async addFile(contentId, { fileUrl, previewUrl = null, storageProvider = 'device' }) {
+    const [r] = await pool.query(
+      `INSERT INTO content_files (content_id,file_url,preview_url,storage_provider)
+       VALUES (:cid,:file,:preview,:prov)`,
+      { cid: contentId, file: fileUrl, preview: previewUrl, prov: storageProvider }
+    );
+    return r.insertId;
+  }
+};

@@ -1,90 +1,46 @@
-const mongoosePaginate = require('mongoose-paginate-v2');
-const mongoose = require('mongoose');
+// models/User.js  
+const pool = require('../db');
 const bcrypt = require('bcryptjs');
 
-const userSchema = new mongoose.Schema({
-  firstName: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  lastName: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    lowercase: true,
-    trim: true
-  },
-  password: {
-    type: String,
-    required: true,
-    minlength: 6
-  },
-  role: {
-    type: String,
-    enum: ['student', 'teacher', 'admin'],
-    default: 'student'
-  },
-  grade: {
-    type: String,
-    required: function() {
-      return this.role === 'student';
-    }
-  },
-  subject: {
-    type: String,
-    required: function() {
-      return this.role === 'teacher';
-    }
-  },
-  dateOfBirth: {
-    type: Date
-  },
-  avatar: {
-    type: String,
-    default: ''
-  },
-  isActive: {
-    type: Boolean,
-    default: true
-  },
-  lastLogin: {
-    type: Date
-  }
-}, {
-  timestamps: true
-});
+function toPublic(u) {
+  if (!u) return null;
+  const { password_hash, ...rest } = u;
+  return rest;
+}
 
-// Hash password before saving
-userSchema.pre('save', async function(next) {
-  if (!this.isModified('password')) return next();
-  
-  try {
-    const salt = await bcrypt.genSalt(12);
-    this.password = await bcrypt.hash(this.password, salt);
-    next();
-  } catch (error) {
-    next(error);
-  }
-});
+module.exports = {
+  // Create user (student/teacher/admin)
+  async create({
+    firstName, lastName, email, password, role = 'student',
+    grade = null, subject = null, avatar = ''
+  }) {
+    const full_name = `${firstName} ${lastName}`.trim();
+    const password_hash = await bcrypt.hash(password, 12);
 
-// Compare password method
-userSchema.methods.comparePassword = async function(candidatePassword) {
-  return await bcrypt.compare(candidatePassword, this.password);
+    const [r] = await pool.query(
+      `INSERT INTO users (role,email,full_name,password_hash,grade_code,subject_main,avatar_url)
+       VALUES (:role,:email,:full_name,:password_hash,:grade,:subject,:avatar)`,
+      { role, email, full_name, password_hash, grade, subject, avatar }
+    );
+    const [rows] = await pool.query(
+      `SELECT id, role, email, full_name, grade_code, subject_main, avatar_url
+       FROM users WHERE id=:id`, { id: r.insertId }
+    );
+    return toPublic(rows[0]);
+  },
+
+  async findByEmail(email) {
+    const [rows] = await pool.query(`SELECT * FROM users WHERE email=:email`, { email });
+    return rows[0] || null;
+  },
+
+  async checkPassword(user, candidate) {
+    return bcrypt.compare(candidate, user.password_hash);
+  },
+
+  async markLogin(userId) {
+    await pool.query(`UPDATE users SET updated_at=NOW() WHERE id=:id`, { id: userId });
+  },
+
+  toPublic
 };
-
-// Remove password from JSON output
-userSchema.methods.toJSON = function() {
-  const user = this.toObject();
-  delete user.password;
-  return user;
-};
-
-userSchema.plugin(mongoosePaginate);
-
-module.exports = mongoose.model('User', userSchema);
