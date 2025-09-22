@@ -1,84 +1,53 @@
-const app = require('./app');
-const mongoose = require('mongoose');
+// server.js  — MySQL / Express edition
 require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const pool = require('./db'); // uses mysql2/promise and your .env
+const app = express();
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 4000;
 
-// Debug: Check if .env is loading
-console.log('Environment check:');
-console.log('NODE_ENV:', process.env.NODE_ENV);
-console.log('PORT:', process.env.PORT);
-console.log('MONGODB_URI exists:', !!process.env.MONGODB_URI);
+// --- Middleware
+app.use(cors());
+app.use(express.json());
 
-// Safety check for MongoDB URI
-if (!process.env.MONGODB_URI) {
-  console.error('❌ ERROR: MONGODB_URI is not defined in environment variables');
-  process.exit(1);
-}
+// --- Health / readiness checks
+app.get('/health', (req, res) => res.json({ ok: true }));
 
-// Mask password in logs for security
-const maskedURI = process.env.MONGODB_URI.replace(/:[^:]*@/, ':****@');
-console.log('MongoDB Connection:', maskedURI);
-
-// Enhanced MongoDB connection with better error handling
-const connectWithRetry = async () => {
+// Simple DB ping to confirm MySQL connectivity
+app.get('/health/db', async (req, res) => {
   try {
-    console.log('Attempting to connect to MongoDB Atlas...');
-    
-    await mongoose.connect(process.env.MONGODB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      serverSelectionTimeoutMS: 5000, // Timeout after 5 seconds
-      socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
-    });
-    
-    console.log('✅ Successfully connected to MongoDB Atlas!');
-    console.log('Database name:', mongoose.connection.db.databaseName);
-    
-    // Start the server only after successful DB connection
-    app.listen(PORT, () => {
-      console.log(`🚀 Server running on port ${PORT}`);
-      console.log(`📊 Health check: http://localhost:${PORT}/api/health`);
-    });
-    
-  } catch (error) {
-    console.error('❌ MongoDB connection failed:', error);
-    console.log('🔍 Error details:');
-    
-    // Specific error handling
-    if (error.name === 'MongoNetworkError') {
-      console.log('- Network error: Check your internet connection and IP whitelisting');
-      console.log('- Your IP in MongoDB Atlas should be: 41.145.197.62/32');
-    } else if (error.name === 'MongoServerError') {
-      console.log('- Authentication error: Check username and password');
-    } else if (error.name === 'MongooseServerSelectionError') {
-      console.log('- Server selection error: Cluster might be down or inaccessible');
-    }
-    
-    console.log('🔄 Retrying connection in 5 seconds...');
-    setTimeout(connectWithRetry, 5000);
+    const [rows] = await pool.query('SELECT 1 AS ok');
+    res.json({ ok: rows?.[0]?.ok === 1 });
+  } catch (e) {
+    res.status(500).json({ ok: false, error: e.message });
   }
-};
-
-// Start the connection process
-connectWithRetry();
-
-// Handle graceful shutdown
-process.on('SIGINT', async () => {
-  console.log('Shutting down gracefully...');
-  await mongoose.connection.close();
-  process.exit(0);
 });
 
-// Error handlers
+// --- API routes (make sure these files exist under ./routes/)
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/grades', require('./routes/grades'));
+app.use('/api/subjects', require('./routes/subjects'));
+app.use('/api/classrooms', require('./routes/classrooms'));
+app.use('/api/content', require('./routes/content'));
+
+// If you added the extra routes I shared:
+try { app.use('/api/activities', require('./routes/activities')); } catch {}
+try { app.use('/api/assignments', require('./routes/assignments')); } catch {}
+try { app.use('/api/uploads', require('./routes/uploads')); } catch {}
+
+// --- Start server
+app.listen(PORT, () => {
+  console.log(`API running on http://localhost:${PORT}`);
+  console.log('Try /health and /health/db');
+});
+
+// --- Safety: crash handlers
 process.on('unhandledRejection', (err) => {
-  console.log('UNHANDLED REJECTION! Shutting down...');
-  console.log(err.name, err.message);
+  console.error('UNHANDLED REJECTION:', err);
   process.exit(1);
 });
-
 process.on('uncaughtException', (err) => {
-  console.log('UNCAUGHT EXCEPTION! Shutting down...');
-  console.log(err.name, err.message);
+  console.error('UNCAUGHT EXCEPTION:', err);
   process.exit(1);
 });

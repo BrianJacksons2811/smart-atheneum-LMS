@@ -1,0 +1,59 @@
+/* greet-anim.css */
+@keyframes greetFadeIn {
+  0% { opacity: 0; transform: translateY(6px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.greet-fade-in {
+  opacity: 0;
+  animation: greetFadeIn 500ms ease-out forwards;
+}
+@keyframes greetFadeOut {
+  0% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(6px); }
+}
+.greet-fade-out {
+  opacity: 1;
+  animation: greetFadeOut 500ms ease-out forwards;
+}
+@keyframes greetSlideIn {
+  0% { opacity: 0; transform: translateX(6px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+.greet-slide-in {
+  opacity: 0;
+  animation: greetSlideIn 500ms ease-out forwards;
+}
+@keyframes greetSlideOut {
+  0% { opacity: 1; transform: translateX(0); }
+  100% { opacity: 0; transform: translateX(6px); }
+}
+.greet-slide-out {
+  opacity: 1;
+  animation: greetSlideOut 500ms ease-out forwards;
+}
+@keyframes greetZoomIn {
+  0% { opacity: 0; transform: scale(0.95); }
+  100% { opacity: 1; transform: scale(1); }
+}
+.greet-zoom-in {
+  opacity: 0;
+  animation: greetZoomIn 500ms ease-out forwards;
+}
+@keyframes greetZoomOut {
+  0% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.95); }
+}
+.greet-zoom-out {
+  opacity: 1;
+  animation: greetZoomOut 500ms ease-out forwards;
+}
+@keyframes greetBounceIn {
+  0% { opacity: 0; transform: scale(0.3); }
+  50% { opacity: 1; transform: scale(1.05); }
+  70% { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+.greet-bounce-in {
+  opacity: 0;
+  animation: greetBounceIn 500ms ease-out forwards;
+}
