@@ -1,6 +1,8 @@
 const profilePic = document.getElementById("profilePic");
 const uploadBtn = document.getElementById("uploadBtn");
 const uploadInput = document.getElementById("uploadPic");
+const removeBtn = document.getElementById("removeBtn");            
+const DEFAULT_AVATAR = "Images/user.png";                
 
 const username = document.getElementById("username");
 const email = document.getElementById("email");
@@ -20,7 +22,7 @@ const gradeInput = document.getElementById("gradeInput");
 // === Load saved data from localStorage ===
 window.addEventListener("DOMContentLoaded", () => {
   const savedPic = localStorage.getItem("profilePic");
-  if (savedPic) profilePic.src = savedPic;
+  profilePic.src = savedPic || DEFAULT_AVATAR;                    
 
   const savedName = localStorage.getItem("username");
   if (savedName) username.textContent = savedName;
@@ -47,6 +49,15 @@ uploadInput.addEventListener("change", (event) => {
     };
     reader.readAsDataURL(file);
   }
+});
+
+// === Remove Picture (reset to default) ===
+removeBtn.addEventListener("click", () => {                     
+  const confirmRemove = confirm("Remove your profile picture and use the default avatar?");
+  if (!confirmRemove) return;
+  localStorage.removeItem("profilePic");
+  profilePic.src = DEFAULT_AVATAR;
+  uploadInput.value = ""; 
 });
 
 // === Open/Close Modal ===
@@ -87,4 +98,3 @@ profileForm.addEventListener("submit", (e) => {
 
   modal.style.display = "none";
 });
-

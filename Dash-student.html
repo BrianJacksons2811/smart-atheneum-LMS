@@ -11,41 +11,43 @@
     <div class="container">
         <header>
             <div class="nav-container">
-            <div class="nav-bar">
-              <div class="logo-container">
-               <img src="./Images/Logo/Smart_Atheneum_2ND_option-removebg-preview.png" alt="Smart Atheneum Logo" class="logo-img">
-              <div class="logo-text">
-                <h1>Smart Atheneum</h1>
-                <p>Student Portal</p>
-            </div>
-           </div>
-               <div class="user-controls">
-               <div class="notification-wrapper">
-                    <i class='bx bx-bell'></i>
-                    <span class="notification-badge">0</span>
-                      <div class="notification-dropdown">
-                        <p>No messages yet</p>
-                      </div>
+                <div class="nav-bar">
+                    <div class="logo-container">
+                        <img src="./Images/Logo/Smart_Atheneum_2ND_option-removebg-preview.png" alt="Smart Atheneum Logo" class="logo-img">
+                        <div class="logo-text">
+                            <h1>Smart Atheneum</h1>
+                            <p>Student Portal</p>
+                        </div>
                     </div>
-                 <div class="profile-wrapper">
-                   <div class="profile-circle">
-                     <i class='bx bx-user'></i>
-                  </div>
-                <div class="profile-dropdown">
-                   <ul>
-                     <li><a href="profile.html">Go to Profile</a></li>
-                     <li><a href="login.html">Logout</a></li>
-                   </ul>
-                  </div>
-               </div>
+                    <div class="user-controls">
+                        <div class="notification-wrapper">
+                            <i class='bx bx-bell'></i>
+                            <span class="notification-badge">0</span>
+                            <div class="notification-dropdown">
+                                <p>No messages yet</p>
+                            </div>
+                        </div>
+                        <div class="profile-wrapper">
+                            <div class="profile-circle">
+                                <i class='bx bx-user'></i>
+                            </div>
+                            <div class="profile-dropdown">
+                                <ul>
+                                    <li><a href="profile.html">Go to Profile</a></li>
+                                    <li><a href="login.html">Logout</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-         </div>
         </header>
+
         <section class="welcome-section">
             <h2 id="welcomeMessage">Welcome back</h2>
             <p>Continue your learning journey and achieve your academic goals.</p>
         </section>
+
         <div class="stats-grid">
             <div class="stat-card">
                 <i class='bx bx-book-alt stat-icon'></i>
@@ -73,125 +75,118 @@
             </div>
         </div>
     </div>
-     <div class="dashboard">
-    <!-- Subjects Section -->
-    <div class="subjects">
-      <h2>📘 My Subjects</h2>
-      <div class="subject-grid">
 
-        <div class="subject-card">
-          <span class="material-icons subject-icon">calculate</span>
-          <div class="subject-title">Mathematics</div>
-          <div class="grade-tag">Grade 9-12</div>
-          <button class="btn-grad enter-classroom" type="button" data-subject="Mathematics">Enter Classroom</button>
+    <div class="dashboard">
+        <!-- Subjects Section -->
+        <div class="subjects">
+            <h2>📘 My Subjects</h2>
+            <div class="subject-grid">
+
+                <div class="subject-card">
+                    <span class="material-icons subject-icon">calculate</span>
+                    <div class="subject-title">Mathematics</div>
+                    <div class="grade-tag">Grade 10-12</div>
+                    <button class="enter-btn" onclick="redirectToSubject('math')">Enter Classroom</button>
+                </div>
+
+                <div class="subject-card">
+                    <span class="material-icons subject-icon">functions</span>
+                    <div class="subject-title">Mathematical Literacy</div>
+                    <div class="grade-tag">Grade 10-12</div>
+                    <button class="enter-btn" onclick="redirectToSubject('maths-lit')">Enter Classroom</button>
+                </div>
+
+                <div class="subject-card">
+                    <span class="material-icons subject-icon">account_balance</span>
+                    <div class="subject-title">Accounting</div>
+                    <div class="grade-tag">Grade 10-12</div>
+                    <button class="enter-btn" onclick="redirectToSubject('accountings')">Enter Classroom</button>
+                </div>
+
+                <div class="subject-card">
+                    <span class="material-icons subject-icon">science</span>
+                    <div class="subject-title">Physical Sciences</div>
+                    <div class="grade-tag">Grade 10-12</div>
+                    <button class="enter-btn" onclick="redirectToSubject('physci')">Enter Classroom</button>
+                </div>
+
+                <div class="subject-card">
+                    <span class="material-icons subject-icon">flight_takeoff</span>
+                    <div class="subject-title">Tourism</div>
+                    <div class="grade-tag">Grade 10-12</div>
+                    <button class="enter-btn" onclick="redirectToSubject('tourisms')">Enter Classroom</button>
+                </div>
+
+                <div class="subject-card">
+                    <span class="material-icons subject-icon">eco</span>
+                    <div class="subject-title">Agriculture</div>
+                    <div class="grade-tag">Grade 10-12</div>
+                    <button class="enter-btn" onclick="redirectToSubject('agri')">Enter Classroom</button>
+                </div>
+
+                <div class="subject-card">
+                    <span class="material-icons subject-icon">public</span>
+                    <div class="subject-title">Geography</div>
+                    <div class="grade-tag">Grade 10-12</div>
+                    <button class="enter-btn" onclick="redirectToSubject('geography')">Enter Classroom</button>
+                </div>
+
+                <div class="subject-card">
+                    <span class="material-icons subject-icon">biotech</span>
+                    <div class="subject-title">Life Sciences</div>
+                    <div class="grade-tag">Grade 10-12</div>
+                    <button class="enter-btn" onclick="redirectToSubject('lifesci')">Enter Classroom</button>
+                </div>
+
+                <div class="subject-card">
+                    <span class="material-icons subject-icon">history_edu</span>
+                    <div class="subject-title">History</div>
+                    <div class="grade-tag">Grade 10-12</div>
+                    <button class="enter-btn" onclick="redirectToSubject('history')">Enter Classroom</button>
+                </div>
+
+            </div>
         </div>
 
-        <div class="subject-card">
-          <span class="material-icons subject-icon">functions</span>
-          <div class="subject-title">Mathematical Literacy</div>
-          <div class="grade-tag">Grade 9-12</div>
-          <button class="enter-btn">Enter Classroom</button>
-        </div>
+        <!-- Sidebar Section -->
+        <div class="sidebar">
+            <div class="sidebar-section">
+                <h3>⏰ Due Soon</h3>
+                <p>No assignments yet</p>
+            </div>
 
-        <div class="subject-card">
-          <span class="material-icons subject-icon">account_balance</span>
-          <div class="subject-title">Accounting</div>
-          <div class="grade-tag">Grade 9-12</div>
-          <button class="enter-btn">Enter Classroom</button>
-        </div>
-
-        <div class="subject-card">
-          <span class="material-icons subject-icon">science</span>
-          <div class="subject-title">Physical Sciences</div>
-          <div class="grade-tag">Grade 9-12</div>
-          <button class="enter-btn">Enter Classroom</button>
-        </div>
-
-        <div class="subject-card">
-          <span class="material-icons subject-icon">flight_takeoff</span>
-          <div class="subject-title">Tourism</div>
-          <div class="grade-tag">Grade 9-12</div>
-          <button class="enter-btn">Enter Classroom</button>
-        </div>
-
-        <div class="subject-card">
-          <span class="material-icons subject-icon">eco</span>
-          <div class="subject-title">Agriculture</div>
-          <div class="grade-tag">Grade 9-12</div>
-          <button class="enter-btn">Enter Classroom</button>
-        </div>
-
-        <div class="subject-card">
-          <span class="material-icons subject-icon">public</span>
-          <div class="subject-title">Geography</div>
-          <div class="grade-tag">Grade 9-12</div>
-          <button class="enter-btn">Enter Classroom</button>
-        </div>
-
-        <div class="subject-card">
-          <span class="material-icons subject-icon">biotech</span>
-          <div class="subject-title">Life Sciences</div>
-          <div class="grade-tag">Grade 9-12</div>
-          <button class="enter-btn">Enter Classroom</button>
-        </div>
-
-        <div class="subject-card">
-          <span class="material-icons subject-icon">history_edu</span>
-          <div class="subject-title">History</div>
-          <div class="grade-tag">Grade 9-12</div>
-          <button class="enter-btn">Enter Classroom</button>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- Sidebar Section -->
-    <div class="sidebar">
-
-      <div class="sidebar-section">
-        <h3>⏰ Due Soon</h3>
-        <p>No assignments yet</p>
-      </div>
-
-      <div class="sidebar-section">
-        <h3>📊 Progress</h3>
-        <p>No progress data yet</p>
-      </div>
-
-      <div class="sidebar-section quick-actions">
-        <h3>⚡ Quick Actions</h3>
-        <button class="primary">View Schedule</button>
-        <button class="secondary">Submit Assignment</button>
-        <button class="secondary">Message Teacher</button>
-      </div>
-    </div>
-  </div>
-   <footer class="site-footer">
-    <div class="footer-container">
-        <div class="footer-section">
-            <h3>Subjects</h3>
-            <ul class="footer-links">
-                <li><a href="mathematics-lessons.html">Mathematics</a></li>
-                <li><a href="science-lessons.html">Physical Sciences</a></li>
-                <li><a href="literacy-lessons.html">Mathematical Literacy</a></li>
-                <li><a href="life-sciences-lessons.html">Life Sciences</a></li>
-                <li><a href="history-lessons.html">History</a></li>
-            </ul>
-        </div>
-        <div class="footer-section">
-            <h3>Support</h3>
-            <ul class="footer-links">
-                <li><a href="faq.html">FAQ</a></li>
-            </ul>
+            <div class="sidebar-section">
+                <h3>📊 Progress</h3>
+                <p>No progress data yet</p>
+            </div>
         </div>
     </div>
-    <div class="footer-bottom">
-        <div class="footer-bottom-content">
-            <p>&copy; 2025 Smart Atheneum LMS. All rights reserved.</p>
-            
+
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>Subjects</h3>
+                <ul class="footer-links">
+                    <li><a href="mathematics-lessons.html">Mathematics</a></li>
+                    <li><a href="science-lessons.html">Physical Sciences</a></li>
+                    <li><a href="literacy-lessons.html">Mathematical Literacy</a></li>
+                    <li><a href="life-sciences-lessons.html">Life Sciences</a></li>
+                    <li><a href="history-lessons.html">History</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Support</h3>
+                <ul class="footer-links">
+                    <li><a href="faq.html">FAQ</a></li>
+                </ul>
+            </div>
         </div>
-    </div>
-</footer>
-    <script src="Dash-student.js"></script>
-</body>
+        <div class="footer-bottom">
+            <div class="footer-bottom-content">
+                <p>&copy; 2025 Smart Atheneum LMS. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    <script src="index.js"></script>
+    </body>
 </html>

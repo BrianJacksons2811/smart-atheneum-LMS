@@ -18,12 +18,30 @@ const MATH_CONTENT = {
     quizzes: [],
     videos: []
   },
+
   "12": {
-    textbook: { title: "Grade 12 Mathematics — Learner Book", href: "content\grade12\Grade 12 Maths_Learner Book.pdfv", note: "Upload & link" },
-    quizzes: [],
-    videos: []
-  }
+  "textbook": {
+    "title": "Grade 12 Mathematics — Learner Book",
+    "href": "content/grade12/Grade 12 Maths_Learner Book.pdf",
+    "note": "Grade 12 Maths_Learner Book.pdf"
+  },
+  "supplements": [
+    {
+      "title": "Grade 12 Mathematics — Mind the Gap Study Guide",
+      "href": "content/grade12/MTG Math Gr 12 Web (1).pdf",
+      "note": "MTG Math Gr 12 Web (1).pdf"
+    },
+    {
+      "title": "Grade 12 Mathematics — SBA Learner Guide",
+      "href": "content/grade12/SBA Maths Learner Guide English.pdf",
+      "note": "SBA Maths Learner Guide English.pdf"
+    }
+  ],
+  "quizzes": [],
+  "videos": []
+}
 };
+
 
 // ---------- Helpers ----------
 function el(tag, attrs={}, ...children){

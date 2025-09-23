@@ -7,18 +7,24 @@
   <link rel="stylesheet" href="profile.css">
 </head>
 <body>
-  <header class="profile-header">
-    <h1>My Profile</h1>
-  </header>
+  <!-- header: add a back-to-dashboard link -->
+<header class="profile-header">
+  <a class="btn btn-outline back-link" href="Dash-student.html">← Back to Dashboard</a>
+  <h1>My Profile</h1>
+</header>
 
-  <main class="profile-container">
-    <!-- Profile Card -->
-    <section class="profile-card">
-      <div class="pic-container">
-        <img id="profilePic" src="Images/default-avatar.png" alt="Profile Picture">
-        <input type="file" id="uploadPic" accept="image/*" hidden>
+<main class="profile-container">
+  <!-- Profile Card -->
+  <section class="profile-card">
+    <div class="pic-container">
+      <img id="profilePic" src="Images/user.png" alt="Profile Picture">
+      <input type="file" id="uploadPic" accept="image/*" hidden>
+      <div class="pic-actions">
         <button id="uploadBtn" class="btn">Upload Picture</button>
+        <!-- NEW: remove picture button -->
+        <button id="removeBtn" class="btn btn-outline danger">Remove Picture</button>
       </div>
+    </div>
       <div class="profile-info">
         <h2 id="username">(No Name Yet)</h2>
         <p id="email">(No Email Yet)</p>

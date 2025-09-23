@@ -8,11 +8,25 @@ body {
   align-items: center;
 }
 
+/* was a centered block; now a flex header so we can place a back link on the left */
+/* NEW: display/align/justify; removed plain text-align centering */
 .profile-header {
   background: #6a0dad;
   width: 100%;
   padding: 20px;
-  text-align: center;
+  /* text-align: center; */            /* (superseded by flex layout) */
+  display: flex;                       /* NEW */
+  align-items: center;                 /* NEW */
+  justify-content: space-between;      /* NEW */
+  box-sizing: border-box;              /* NEW */
+}
+
+/* keep the title visually centered even with a left back-link */
+/* NEW */
+.profile-header h1 {
+  margin: 0;                           /* NEW: reset default margin */
+  flex: 1;                              /* NEW: allow h1 to take space */
+  text-align: center;                   /* NEW: center the title text */
 }
 
 .profile-container {
@@ -81,7 +95,49 @@ h2 {
   margin-top: 0;
 }
 
+/* ---------- NEW utility & layout styles ---------- */
 
+/* back-to-dashboard link styling */
+/* NEW */
+.back-link {
+  text-decoration: none;
+  color: #fff;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.6);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+.back-link:hover {                     /* NEW */
+  background: rgba(255,255,255,0.12);
+}
+
+/* group the Upload / Remove buttons under the avatar */
+/* NEW */
+.pic-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* outline button variant (used for Remove + Back link visual match) */
+/* NEW */
+.btn-outline {
+  background: transparent;
+  border: 1px solid #6a0dad;
+  color: #fff;
+}
+.btn-outline:hover {                   /* NEW */
+  background: #5500aa;
+}
+
+/* subtle destructive hint for the Remove Picture button */
+/* NEW */
+.btn.danger {
+  border-color: #ff6b6b;
+}
+.btn.danger:hover {                    /* NEW */
+  background: #b74444;
+}
 
 /* Modal styles */
 .modal {
@@ -106,7 +162,6 @@ h2 {
 
 .modal-content h2 {
   margin-top: 4rem;
-
 }
 
 .modal-content label {
@@ -133,5 +188,14 @@ h2 {
   .profile-card {
     flex-direction: column;
     text-align: center;
+  }
+
+  /* NEW: keep header nice on small screens */
+  .profile-header {
+    flex-direction: row;
+    gap: 8px;
+  }
+  .profile-header h1 {
+    font-size: 1.25rem;                /* NEW */
   }
 }

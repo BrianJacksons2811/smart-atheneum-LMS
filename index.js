@@ -19,7 +19,36 @@ document.querySelector("form").addEventListener("submit", function(e) {
 
   alert("✅ Registration successful!");
   this.submit();
+
+   document.getElementById("registerForm").addEventListener("submit", function(event) {
+      event.preventDefault(); // stop normal form action
+
+      const successMsg = document.getElementById("successMsg");
+      successMsg.style.display = "block"; // show success text
+
+      // redirect to login after 3s
+      setTimeout(() => {
+        window.location.href = "login.html";
+      }, 3000);
+    });
 });
+  // hide success message by default
+  const successMsg = document.getElementById('successMsg');
+  successMsg.style.display = 'none';
+
+  function showForm(redirectUrl) {
+    // prevent the form from submitting
+    event.preventDefault();
+
+    // Show the success message
+    successMsg.style.display = 'block';
+
+    // Redirect to login after 2-3 seconds
+    setTimeout(() => {
+      window.location.href = redirectUrl;
+    }, 2000); // 2000ms = 2 seconds
+  }
+
 
 //Login js
 
@@ -66,4 +95,40 @@ togglePassword.addEventListener("click", () => {
   togglePassword.classList.toggle("bx-show");
   togglePassword.classList.toggle("bx-hide");
 });
+
+// subject student dashboard js
+
+  function redirectToSubject(subject) {
+            switch(subject) {
+                case 'math':
+                    window.location.href = 'math.html';
+                    break;
+                case 'maths-lit':
+                    window.location.href = 'mathlit.html';
+                    break;
+                case 'accountings':
+                    window.location.href = 'accountings.html';
+                    break;
+                case 'physci':
+                    window.location.href = 'physci.html';
+                    break;
+                case 'tourisms':
+                    window.location.href = 'tourisms.html';
+                    break;
+                case 'agri':
+                    window.location.href = 'agri.html';
+                    break;
+                case 'geography':
+                    window.location.href = 'geography.html';
+                    break;
+                case 'lifesci':
+                    window.location.href = 'lifesci.html';
+                    break;
+                case 'history':
+                    window.location.href = 'history.html';
+                    break;
+                default:
+                    alert('Subject page not found!');
+            }
+        }
 
