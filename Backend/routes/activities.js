@@ -1,7 +1,8 @@
-const express = require('express');
-const router = express.Router();
-const { auth } = require('../middleware/auth');
-const activityCtl = require('../controllers/activityController');
-router.get('/', auth, activityCtl.getUserActivities);
-router.post('/', auth, activityCtl.createActivity);
+const router = require('express').Router();
+const auth = require('../middleware/auth');
+const ctrl = require('../controllers/activityController');
+
+router.get('/', auth, ctrl.list);
+router.post('/', auth, ctrl.add);
+
 module.exports = router;

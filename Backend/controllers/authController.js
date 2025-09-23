@@ -1,135 +1,61 @@
-const User = require('../models/User');
 const jwt = require('jsonwebtoken');
-const { validationResult } = require('express-validator');
+const User = require('../models/User');
+const pool = require('../database');
 
-// Generate JWT Token
-const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRE || '7d'
-  });
-};
 
-// Register user
+const sign = (user) =>
+  jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '7d' });
+
 exports.register = async (req, res) => {
   try {
-    // Check for validation errors
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ 
-        message: 'Validation failed', 
-        errors: errors.array() 
-      });
-    }
+    const { fullName, email, password, role, gradeCode, subjectMain } = req.body;
 
-    const { firstName, lastName, email, password, role, grade, subject, dateOfBirth } = req.body;
+    const exists = await User.findByEmail(email);
+    if (exists) return res.status(409).json({ message: 'Email already in use' });
 
-    // Check if user already exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ message: 'User already exists with this email' });
-    }
-
-    // Create new user
-    const user = new User({
-      firstName,
-      lastName,
-      email,
-      password,
-      role: role || 'student',
-      grade,
-      subject,
-      dateOfBirth
-    });
-
-    await user.save();
-
-    // Generate token
-    const token = generateToken(user._id);
-
-    res.status(201).json({
-      message: 'User registered successfully',
-      token,
-      user: {
-        id: user._id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        role: user.role,
-        grade: user.grade,
-        subject: user.subject
-      }
-    });
-  } catch (error) {
-    console.error('Registration error:', error);
-    res.status(500).json({ message: 'Server error during registration' });
+    const created = await User.create({ fullName, email, password, role, gradeCode, subjectMain });
+    const token = sign(created);
+    res.status(201).json({ token, user: created });
+  } catch (e) {
+    res.status(500).json({ message: e.message });
   }
 };
 
-// Login user
 exports.login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, role } = req.body;
+    const u = await User.findByEmail(email);
+    if (!u) return res.status(400).json({ message: 'Invalid credentials' });
+    if (role && u.role !== role) return res.status(400).json({ message: 'Role mismatch' });
 
-    // Check if user exists
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(400).json({ message: 'Invalid credentials' });
-    }
+    const ok = await User.checkPassword(u, password);
+    if (!ok) return res.status(400).json({ message: 'Invalid credentials' });
 
-    // Check if account is active
-    if (!user.isActive) {
-      return res.status(400).json({ message: 'Account is deactivated' });
-    }
-
-    // Check password
-    const isMatch = await user.comparePassword(password);
-    if (!isMatch) {
-      return res.status(400).json({ message: 'Invalid credentials' });
-    }
-
-    // Update last login
-    user.lastLogin = new Date();
-    await user.save();
-
-    // Generate token
-    const token = generateToken(user._id);
-
-    res.json({
-      message: 'Login successful',
-      token,
-      user: {
-        id: user._id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        role: user.role,
-        grade: user.grade,
-        subject: user.subject
-      }
-    });
-  } catch (error) {
-    console.error('Login error:', error);
-    res.status(500).json({ message: 'Server error during login' });
+    await User.markLogin(u.id);
+    const token = sign(u);
+    res.json({ token, user: User.toPublic(u) });
+  } catch (e) {
+    res.status(500).json({ message: e.message });
   }
 };
 
-// Get current user
-exports.getCurrentUser = async (req, res) => {
+exports.me = async (req, res) => {
+  res.json(User.toPublic(req.user));
+};
+
+exports.updateMe = async (req, res) => {
   try {
-    res.json({
-      user: {
-        id: req.user._id,
-        firstName: req.user.firstName,
-        lastName: req.user.lastName,
-        email: req.user.email,
-        role: req.user.role,
-        grade: req.user.grade,
-        subject: req.user.subject,
-        lastLogin: req.user.lastLogin
-      }
-    });
-  } catch (error) {
-    console.error('Get current user error:', error);
-    res.status(500).json({ message: 'Server error' });
+    const { fullName, avatar_url } = req.body;
+    await require('../database').query(
+      `UPDATE users SET full_name = COALESCE(:full, full_name),
+                        avatar_url = COALESCE(:avatar, avatar_url),
+                        updated_at = NOW()
+       WHERE id = :id`,
+      { full: fullName || null, avatar: avatar_url || null, id: req.user.id }
+    );
+    const fresh = await User.findById(req.user.id);
+    res.json(User.toPublic(fresh));
+  } catch (e) {
+    res.status(500).json({ message: e.message });
   }
 };

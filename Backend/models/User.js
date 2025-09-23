@@ -1,31 +1,21 @@
-// models/User.js  
-const pool = require('../db');
+const pool = require('../database');
 const bcrypt = require('bcryptjs');
 
-function toPublic(u) {
+const toPublic = (u) => {
   if (!u) return null;
   const { password_hash, ...rest } = u;
   return rest;
-}
+};
 
 module.exports = {
-  // Create user (student/teacher/admin)
-  async create({
-    firstName, lastName, email, password, role = 'student',
-    grade = null, subject = null, avatar = ''
-  }) {
-    const full_name = `${firstName} ${lastName}`.trim();
+  async create({ fullName, email, password, role = 'student', gradeCode = null, subjectMain = null, avatar_url = '' }) {
     const password_hash = await bcrypt.hash(password, 12);
-
     const [r] = await pool.query(
-      `INSERT INTO users (role,email,full_name,password_hash,grade_code,subject_main,avatar_url)
-       VALUES (:role,:email,:full_name,:password_hash,:grade,:subject,:avatar)`,
-      { role, email, full_name, password_hash, grade, subject, avatar }
+      `INSERT INTO users (role, email, full_name, password_hash, grade_code, subject_main, avatar_url)
+       VALUES (:role,:email,:full,:hash,:grade,:subject,:avatar)`,
+      { role, email, full: fullName, hash: password_hash, grade: gradeCode, subject: subjectMain, avatar: avatar_url }
     );
-    const [rows] = await pool.query(
-      `SELECT id, role, email, full_name, grade_code, subject_main, avatar_url
-       FROM users WHERE id=:id`, { id: r.insertId }
-    );
+    const [rows] = await pool.query(`SELECT * FROM users WHERE id=:id`, { id: r.insertId });
     return toPublic(rows[0]);
   },
 
@@ -34,12 +24,17 @@ module.exports = {
     return rows[0] || null;
   },
 
+  async findById(id) {
+    const [rows] = await pool.query(`SELECT * FROM users WHERE id=:id`, { id });
+    return rows[0] || null;
+  },
+
   async checkPassword(user, candidate) {
     return bcrypt.compare(candidate, user.password_hash);
   },
 
-  async markLogin(userId) {
-    await pool.query(`UPDATE users SET updated_at=NOW() WHERE id=:id`, { id: userId });
+  async markLogin(id) {
+    await pool.query(`UPDATE users SET updated_at=NOW() WHERE id=:id`, { id });
   },
 
   toPublic

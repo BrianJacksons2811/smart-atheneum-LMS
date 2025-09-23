@@ -1,10 +1,7 @@
-const express = require('express');
-const router = express.Router();
-const { auth, requireRole } = require('../middleware/auth');
-const uploadCtl = require('../controllers/uploadController');
-const up = require('../middleware/upload');
-router.post('/textbook', auth, requireRole(['teacher','admin']), up.uploadTextbook, uploadCtl.uploadTextbook);
-router.post('/exam', auth, requireRole(['teacher','admin']), up.uploadExam, uploadCtl.uploadExam);
-router.post('/video', auth, requireRole(['teacher','admin']), up.uploadVideo, uploadCtl.uploadVideo);
-router.post('/recording', auth, requireRole(['teacher','admin']), up.uploadRecording, uploadCtl.uploadRecording);
+const router = require('express').Router();
+const auth = require('../middleware/auth');
+const ctrl = require('../controllers/uploadController');
+
+router.post('/', auth, ctrl.create);
+
 module.exports = router;

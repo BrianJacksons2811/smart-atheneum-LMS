@@ -1,51 +1,33 @@
 const Activity = require('../models/Activity');
+const pool = require('../database');
 
-// Get user activities
-exports.getUserActivities = async (req, res) => {
+
+exports.list = async (req, res) => {
   try {
-    const { page = 1, limit = 20, type } = req.query;
-    
-    const filter = { user: req.user._id };
-    if (type) filter.type = type;
-    
-    const options = {
-      page: parseInt(page),
-      limit: parseInt(limit),
-      sort: { createdAt: -1 }
-    };
-    
-    const activities = await Activity.paginate(filter, options);
-    
-    res.json(activities);
-  } catch (error) {
-    console.error('Get activities error:', error);
-    res.status(500).json({ message: 'Server error fetching activities' });
+    const limit = Math.min(parseInt(req.query.limit || '20', 10), 100);
+    const offset = parseInt(req.query.offset || '0', 10);
+    const classroomId = req.query.classroomId ? Number(req.query.classroomId) : null;
+    const rows = await Activity.list({ classroomId, limit, offset });
+    res.json(rows);
+  } catch (e) {
+    res.status(500).json({ message: e.message });
   }
 };
 
-// Create activity
-exports.createActivity = async (req, res) => {
+exports.add = async (req, res) => {
   try {
-    const { type, title, description, resourceType, resourceId, metadata } = req.body;
-    
-    const activity = new Activity({
-      user: req.user._id,
-      type,
+    const { classroomId = null, subjectName = null, title, type, metadata = null } = req.body;
+    if (!title || !type) return res.status(400).json({ message: 'title and type are required' });
+    const id = await Activity.add({
+      userId: req.user?.id || null,
+      classroomId,
+      subjectName,
       title,
-      description,
-      resourceType,
-      resourceId,
+      type,
       metadata
     });
-    
-    await activity.save();
-    
-    res.status(201).json({
-      message: 'Activity logged successfully',
-      activity
-    });
-  } catch (error) {
-    console.error('Create activity error:', error);
-    res.status(500).json({ message: 'Server error creating activity' });
+    res.status(201).json({ id });
+  } catch (e) {
+    res.status(500).json({ message: e.message });
   }
 };

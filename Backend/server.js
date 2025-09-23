@@ -1,20 +1,26 @@
-// server.js  — MySQL / Express edition
+// server.js — Smart Atheneum API (MySQL Edition)
+console.log("[BOOT] Starting Smart Atheneum API…");
+
 require('dotenv').config();
+const path = require('path');
 const express = require('express');
 const cors = require('cors');
-const pool = require('./db'); // uses mysql2/promise and your .env
-const app = express();
 
+// MySQL pool
+const pool = require('./database'); 
+
+const app = express();
 const PORT = process.env.PORT || 4000;
 
-// --- Middleware
-app.use(cors());
-app.use(express.json());
+// --- Core middleware
+app.use(cors({ origin: true, credentials: false }));
+app.use(express.json({ limit: '2mb' }));
 
-// --- Health / readiness checks
+// --- Static site (serve your HTML/CSS/JS from project root or /public)
+app.use(express.static(path.join(__dirname, '..')));
+
+// --- Health
 app.get('/health', (req, res) => res.json({ ok: true }));
-
-// Simple DB ping to confirm MySQL connectivity
 app.get('/health/db', async (req, res) => {
   try {
     const [rows] = await pool.query('SELECT 1 AS ok');
@@ -24,30 +30,19 @@ app.get('/health/db', async (req, res) => {
   }
 });
 
-// --- API routes (make sure these files exist under ./routes/)
+// --- Routes (make sure these files exist and export a router)
 app.use('/api/auth', require('./routes/auth'));
-app.use('/api/grades', require('./routes/grades'));
-app.use('/api/subjects', require('./routes/subjects'));
-app.use('/api/classrooms', require('./routes/classrooms'));
 app.use('/api/content', require('./routes/content'));
+app.use('/api/activities', require('./routes/activities'));
+app.use('/api/uploads', require('./routes/uploads'));
+try { app.use('/api/users', require('./routes/users')); } catch {}
 
-// If you added the extra routes I shared:
-try { app.use('/api/activities', require('./routes/activities')); } catch {}
-try { app.use('/api/assignments', require('./routes/assignments')); } catch {}
-try { app.use('/api/uploads', require('./routes/uploads')); } catch {}
-
-// --- Start server
+// --- Start
 app.listen(PORT, () => {
-  console.log(`API running on http://localhost:${PORT}`);
+  console.log(`[READY] API: http://localhost:${PORT}`);
   console.log('Try /health and /health/db');
 });
 
-// --- Safety: crash handlers
-process.on('unhandledRejection', (err) => {
-  console.error('UNHANDLED REJECTION:', err);
-  process.exit(1);
-});
-process.on('uncaughtException', (err) => {
-  console.error('UNCAUGHT EXCEPTION:', err);
-  process.exit(1);
-});
+// --- Crash safety
+process.on('unhandledRejection', (err) => { console.error('UNHANDLED REJECTION:', err); process.exit(1); });
+process.on('uncaughtException',  (err) => { console.error('UNCAUGHT EXCEPTION:',  err); process.exit(1); });

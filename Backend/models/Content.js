@@ -1,5 +1,6 @@
 // models/Content.js 
-const pool = require('../db');
+const pool = require('../database');
+
 
 module.exports = {
   // list by classroom 

@@ -1,5 +1,5 @@
 // models/File.js 
-const pool = require('../db');
+const pool = require('../database');
 
 module.exports = {
   async create({

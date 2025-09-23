@@ -1,5 +1,6 @@
 // models/Activity.js (MySQL version)
-const pool = require('../db');
+const pool = require('../database');
+
 
 module.exports = {
   async list({ classroomId = null, limit = 20, offset = 0 } = {}) {
