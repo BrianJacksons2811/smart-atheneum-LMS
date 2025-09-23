@@ -80,6 +80,9 @@ h2 {
   color: white;
   cursor: pointer;
 }
+#editBtn{
+  margin-top: 25px;
+}
 
 .btn:hover {
   background: #5500aa;
@@ -113,14 +116,13 @@ h2 {
 }
 
 /* group the Upload / Remove buttons under the avatar */
-/* NEW */
 .pic-actions {
   display: flex;
   gap: 10px;
 }
 
 /* outline button variant (used for Remove + Back link visual match) */
-/* NEW */
+
 .btn-outline {
   background: transparent;
   border: 1px solid #6a0dad;
@@ -131,11 +133,10 @@ h2 {
 }
 
 /* subtle destructive hint for the Remove Picture button */
-/* NEW */
 .btn.danger {
   border-color: #ff6b6b;
 }
-.btn.danger:hover {                    /* NEW */
+.btn.danger:hover {                    
   background: #b74444;
 }
 
