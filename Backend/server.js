@@ -1,7 +1,7 @@
 // server.js — Smart Atheneum API (MySQL Edition, Railway-safe)
 console.log("[BOOT] Starting Smart Atheneum API…");
-
 require("dotenv").config();
+
 const path = require("path");
 const fs = require("fs");
 const express = require("express");
@@ -24,7 +24,7 @@ function safeRequire(p) {
 // Don’t crash the app if DB init fails — still serve /health
 let pool = null;
 try {
-  pool = safeRequire("./database"); // your module should export a mysql2/promise pool
+  pool = safeRequire("./database"); // should export a mysql2/promise pool
   if (!pool) throw new Error("database module not found");
   console.log("✅ DB module loaded");
 } catch (e) {
@@ -42,17 +42,21 @@ app.use(
 );
 app.options("*", cors()); // handle preflight
 
+// MUST be before routes so req.body is parsed
 app.use(express.json({ limit: "2mb" }));
+app.use(express.urlencoded({ extended: true }));
 
-// Static files (serve only if the folder exists)
-const publicDir = path.join(__dirname, "..");
-if (fs.existsSync(publicDir)) {
-  app.use(express.static(publicDir));
-}
+/* (optional) tiny request logger to debug 405/404 issues */
+// app.use((req, res, next) => {
+//   const t0 = Date.now();
+//   res.on("finish", () =>
+//     console.log(`[REQ] ${req.method} ${req.originalUrl} -> ${res.statusCode} (${Date.now()-t0}ms)`)
+//   );
+//   next();
+// });
 
 /* ------------------------- health -------------------------- */
 app.get("/health", (_req, res) => res.json({ ok: true, ts: Date.now() }));
-
 app.get("/health/db", async (_req, res) => {
   if (!pool) return res.status(500).json({ ok: false, error: "DB not initialized" });
   try {
@@ -63,24 +67,32 @@ app.get("/health/db", async (_req, res) => {
   }
 });
 
-/* ------------------------- routes -------------------------- */
-// Load each router only if the file exists; don’t crash the server
+/* ------------------------- routes (API FIRST) --------------- */
 const authRouter = safeRequire("./routes/auth");
 if (authRouter) app.use("/api/auth", authRouter);
-
-const contentRouter = safeRequire("./routes/content");
-if (contentRouter) app.use("/api/content", contentRouter);
-
-const activitiesRouter = safeRequire("./routes/activities");
-if (activitiesRouter) app.use("/api/activities", activitiesRouter);
-
-const uploadsRouter = safeRequire("./routes/uploads");
-if (uploadsRouter) app.use("/api/uploads", uploadsRouter);
 
 const usersRouter = safeRequire("./routes/users");
 if (usersRouter) app.use("/api/users", usersRouter);
 
-/* ------------------------- start --------------------------- */
+const contentRouter = safeRequire("./routes/content");
+if (contentRouter) app.use("/api/content", contentRouter);
+
+const uploadsRouter = safeRequire("./routes/uploads");
+if (uploadsRouter) app.use("/api/uploads", uploadsRouter);
+
+const activitiesRouter = safeRequire("./routes/activities");
+if (activitiesRouter) app.use("/api/activities", activitiesRouter);
+
+/* ------------------------- static AFTER api ----------------- */
+const publicDir = path.join(__dirname, ".."); // adjust if your HTML lives elsewhere
+if (fs.existsSync(publicDir)) {
+  app.use(express.static(publicDir));
+}
+
+/* ------------------------- fallbacks ------------------------ */
+app.use((req, res) => res.status(404).json({ message: `Not found: ${req.method} ${req.originalUrl}` }));
+
+/* ------------------------- start ---------------------------- */
 // IMPORTANT: bind to 0.0.0.0 so Railway can reach it
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`[READY] API listening on port ${PORT}`);
@@ -94,5 +106,3 @@ process.on("unhandledRejection", (err) => {
 process.on("uncaughtException", (err) => {
   console.error("UNCAUGHT EXCEPTION:", err);
 });
-
-app.use("/api/auth", require("./routes/auth"));

@@ -1,87 +1,92 @@
 // routes/auth.js
-const express = require("express");
-const bcrypt  = require("bcryptjs");
-const router  = express.Router();
-const pool    = require("../database"); // mysql2/promise pool
+const router = require('express').Router();
+const bcrypt = require('bcryptjs');
+const pool   = require('../database'); // mysql2/promise pool
 
-const normalizeEmail = (v) => (v || "").trim().toLowerCase();
+const normEmail = v => (v || '').trim().toLowerCase();
 
-// POST /api/auth/register
-router.post("/register", async (req, res) => {
+/* -------- Optional: preflight to avoid proxy 405s ---------- */
+router.options(['/register','/register/','/login','/login/'], (_req, res) => res.sendStatus(204));
+
+/* ---------------------- REGISTER --------------------------- */
+// replaces: router.post('/register', /* handler */);
+router.post(['/register','/register/'], async (req, res) => {
   try {
-    let { fullName, email, password, role = "student", gradeCode = null, dob = null } = req.body || {};
+    let {
+      fullName,
+      email,
+      password,
+      role = 'student',
+      gradeCode = null,
+      gender = null,
+      dob = null
+    } = req.body || {};
+
     if (!fullName || !email || !password) {
-      return res.status(400).json({ message: "Missing fields" });
+      return res.status(400).json({ message: 'Missing fields' });
     }
 
-    email = normalizeEmail(email);
+    email = normEmail(email);
 
-    // Check if user exists
-    const [exists] = await pool.query("SELECT id FROM users WHERE email = ?", [email]);
-    if (exists.length) {
-      return res.status(409).json({ message: "Account already exists." });
-    }
+    // already exists?
+    const [exists] = await pool.query('SELECT id FROM users WHERE email = ?', [email]);
+    if (exists.length) return res.status(409).json({ message: 'Account already exists.' });
 
-    // Hash password and insert
+    // hash + insert
     const hash = await bcrypt.hash(password, 10);
     await pool.query(
-      "INSERT INTO users (full_name, email, password_hash, role, grade_code, dob) VALUES (?,?,?,?,?,?)",
-      [fullName, email, hash, role, gradeCode, dob]
+      'INSERT INTO users (full_name, email, password_hash, role, grade_code, gender, dob) VALUES (?,?,?,?,?,?,?)',
+      [fullName, email, hash, role, gradeCode, gender, dob]
     );
 
-    // Fetch created user to return minimal profile
+    // return created user basics
     const [rows] = await pool.query(
-      "SELECT id, full_name AS fullName, email, role, grade_code AS gradeCode, dob FROM users WHERE email = ?",
+      'SELECT id, full_name AS fullName, email, role, grade_code AS gradeCode, gender, dob FROM users WHERE email = ?',
       [email]
     );
 
-    return res.status(201).json({ ok: true, user: rows[0] || { fullName, email, role, gradeCode, dob } });
+    return res.status(201).json({ ok: true, user: rows[0] || { fullName, email, role, gradeCode, gender, dob } });
   } catch (e) {
-    console.error("REGISTER error:", e);
-    return res.status(500).json({ message: "Server error" });
+    console.error('REGISTER error:', e);
+    return res.status(500).json({ message: 'Server error' });
   }
 });
 
-// POST /api/auth/login
-router.post("/login", async (req, res) => {
+/* ------------------------ LOGIN ---------------------------- */
+// replaces: router.post('/login', /* handler */);
+router.post(['/login','/login/'], async (req, res) => {
   try {
     let { email, password } = req.body || {};
-    if (!email || !password) {
-      return res.status(400).json({ message: "Missing credentials" });
-    }
+    if (!email || !password) return res.status(400).json({ message: 'Missing credentials' });
 
-    email = normalizeEmail(email);
+    email = normEmail(email);
 
     const [rows] = await pool.query(
-      "SELECT id, full_name AS fullName, email, password_hash, role, grade_code AS gradeCode, dob FROM users WHERE email = ?",
+      'SELECT id, full_name AS fullName, email, password_hash, role, grade_code AS gradeCode, gender, dob FROM users WHERE email = ?',
       [email]
     );
+    if (!rows.length) return res.status(404).json({ message: 'No account found. Please register first.' });
 
-    if (!rows.length) {
-      return res.status(404).json({ message: "No account found. Please register first." });
-    }
-
-    const u = rows[0];
+    const u  = rows[0];
     const ok = await bcrypt.compare(password, u.password_hash);
-    if (!ok) {
-      return res.status(401).json({ message: "Incorrect email or password." });
-    }
+    if (!ok) return res.status(401).json({ message: 'Incorrect email or password.' });
 
-    // Build response user without password_hash
+    // build response without password_hash
     const user = {
       id: u.id,
       fullName: u.fullName,
       email: u.email,
       role: u.role,
       gradeCode: u.gradeCode,
+      gender: u.gender,
       dob: u.dob
     };
 
-    // Issue a simple mock token for now (replace with JWT later if needed)
-    return res.json({ token: "mock-token", user });
+    // simple mock token for now (swap for JWT later)
+    return res.json({ token: 'mock-token', user });
   } catch (e) {
-    console.error("LOGIN error:", e);
-    return res.status(500).json({ message: "Server error" });
+    console.error('LOGIN error:', e);
+    return res.status(500).json({ message: 'Server error' });
   }
 });
 
