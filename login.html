@@ -4,44 +4,51 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="light dark">
-    <title>Smart Atheneum login </title>
+    <title>Smart Atheneum login</title>
     <link rel="stylesheet" href="style.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
   </head>
   <body>
     <div class="wrapper">
-        <form action="">
-            <div class="first-icon">
-                <img src="./Images/import_contacts_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" color="#cc66ff">
-            </div>
-            <div class="form-head">
-                <h1>Student Login</h1>
-                <p>Access your learning dashboard</p>
-            </div>
-           <div class="input-box">
-            <input type="username" placeholder="username" required>
-            <i class='bx bx-envelope'></i>
-           </div>
-    
-           <div class="input-box">
-              <input type="password" id="loginPassword" placeholder="Password" required>
-              <i class='bx bx-show toggle-password' id="toggleLoginPassword"></i>
-            </div>
+      <form id="loginForm" action="">
+        <div class="first-icon">
+          <img src="./Images/import_contacts_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="">
+        </div>
+        <div class="form-head">
+          <h1>Student Login</h1>
+          <p>Access your learning dashboard</p>
+        </div>
 
-           
-           <div class="remember-forgot">
-            <label><input type="checkbox">Remember me</label>
-            <a href="forgot-Pass.html">Forgot password</a>
-           </div>
-           <button type="submit" class="btn"><a href="Dash-student.html" class="btn">Sign-In</a></button>
-           <div class="register-link">
-            <p>Dont have an account? <a href="Reg.html">Sign-Up!</a></p>
-           </div>
-           <div class="back-to-home">
-            <a href="index.html" class="back-btn">&#8592;Back to home</a>
-           </div>
-        </form>
+        <div class="input-box">
+          <input id="loginEmail" type="email" placeholder="Email" required>
+          <i class='bx bx-envelope'></i>
+        </div>
+
+        <div class="input-box">
+          <input id="loginPassword" type="password" placeholder="Password" required>
+          <i class='bx bx-show toggle-password' id="toggleLoginPassword"></i>
+        </div>
+
+        <div class="remember-forgot">
+          <label><input type="checkbox" id="rememberMe">Remember me</label>
+          <a href="forgot-Pass.html">Forgot password</a>
+        </div>
+
+        <!-- Button is a real submit; JS will handle the redirect -->
+        <button type="submit" class="btn">Sign-In</button>
+
+        <!-- Inline error area -->
+        <p id="loginError" class="error-message" role="alert" style="display:none;"></p>
+
+        <div class="register-link">
+          <p>Don’t have an account? <a href="Reg.html">Sign-Up!</a></p>
+        </div>
+        <div class="back-to-home">
+          <a href="index.html" class="back-btn">&#8592;Back to home</a>
+        </div>
+      </form>
     </div>
+    <script src="config.js"></script>
     <script src="index.js"></script>
   </body>
 </html>

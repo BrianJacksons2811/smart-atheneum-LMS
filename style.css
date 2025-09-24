@@ -388,13 +388,9 @@ button:hover {
   text-decoration: none;
 }
 
-.success-message {
-      display: none; /* hidden by default */
-      color: green;
-      margin-top: 10px;
-      font-weight: 500;
-      text-align: center;
-    }
+.success-message { color: #36d399; margin-top: 10px; }
+.error-message { color: #ff6b6b; margin-top: 10px; }
+
 
 /* =========================================
    Responsive layer — Login / Register UIs

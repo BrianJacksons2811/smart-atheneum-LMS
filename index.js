@@ -1,10 +1,54 @@
 //Reg js
 
-document.querySelector("form").addEventListener("submit", function(e) {
-  e.preventDefault(); // 
+// ---------- Registration wiring (UPDATED → uses API) ----------
+(function(){
+  const btn = document.getElementById("registerBtn");
+  if (!btn) return;
 
-  const password = document.querySelector("input[name='password']");
-  const confirmPassword = document.querySelector("input[name='confirmPassword']");
+  const firstName   = document.getElementById("firstName");
+  const lastName    = document.getElementById("lastName");
+  const regEmail    = document.getElementById("regEmail");
+  const grade       = document.getElementById("grade");
+  const dob         = document.getElementById("dob");
+  const regPassword = document.getElementById("regPassword");
+  const regConfirm  = document.getElementById("regConfirm");
+  const regError    = document.getElementById("regError");
+  const successMsg  = document.getElementById("successMsg");
+
+  function showErr(m){ if(regError){regError.textContent=m; regError.style.display="block";} if(successMsg) successMsg.style.display="none"; }
+  function showOK(m){ if(successMsg){successMsg.textContent=m; successMsg.style.display="block";} if(regError) regError.style.display="none"; }
+
+  btn.addEventListener("click", async () => {
+    const email = regEmail.value.trim();
+    const pass  = regPassword.value;
+    const conf  = regConfirm.value;
+
+    if (pass.length < 6) return showErr("Password should be at least 6 characters.");
+    if (pass !== conf)   return showErr("Passwords do not match.");
+
+    // Your backend expects (from controllers) a user payload; mapping common fields:
+    const payload = {
+      fullName: `${firstName.value.trim()} ${lastName.value.trim()}`.trim(),
+      email,
+      password: pass,
+      role: "student",         // change if you add a role selector
+      gradeCode: grade.value,  // maps your “grade” to backend gradeCode
+      subjectMain: ""          // optional; fill if you capture a major subject
+    };
+
+    try {
+      btn.disabled = true;
+      await apiRegister(payload);
+      showOK("✅ Account registered successfully! Redirecting to login…");
+      setTimeout(() => { window.location.href = "login.html"; }, 1200);
+    } catch (e) {
+      showErr(e.message || "Registration failed. Please try again.");
+    } finally {
+      btn.disabled = false;
+    }
+  });
+})();
+
 
   // Reset styles
   password.style.borderColor = "#3b3b4f";
@@ -31,7 +75,7 @@ document.querySelector("form").addEventListener("submit", function(e) {
         window.location.href = "login.html";
       }, 3000);
     });
-});
+
   // hide success message by default
   const successMsg = document.getElementById('successMsg');
   successMsg.style.display = 'none';
@@ -51,6 +95,76 @@ document.querySelector("form").addEventListener("submit", function(e) {
 
 
 //Login js
+
+// ---------- Login wiring (UPDATED → uses API) ----------
+(function(){
+  const form = document.getElementById("loginForm");
+  if (!form) return;
+
+  const email = document.getElementById("loginEmail");
+  const pass  = document.getElementById("loginPassword");
+  const err   = document.getElementById("loginError");
+
+  function showErr(m){ if(err){ err.textContent = m; err.style.display = "block"; } }
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (err) err.style.display = "none";
+
+    try {
+      const data = await apiLogin({ email: email.value.trim(), password: pass.value });
+      // store token for authenticated pages (Authorization: Bearer <token>)
+      if (data?.token) localStorage.setItem("token", data.token);
+      if (data?.user)  localStorage.setItem("currentUser", JSON.stringify(data.user));
+
+      const role = data?.user?.role || "student";
+      window.location.href = (role === "teacher") ? "teach-dash.html" : "Dash-student.html";
+    } catch (e) {
+      // If user doesn’t exist → “sign up first”; wrong password → “Incorrect…”
+      showErr(e.message || "Login failed. Please try again.");
+    }
+  });
+})();
+
+
+
+
+
+/* ===== API glue (NEW) ===== */
+const BASE = window.API_BASE;
+const ENDPOINTS = window.API || { REGISTER: "/api/auth/register", LOGIN: "/api/auth/login" };
+
+async function safeJson(res){ try { return await res.json(); } catch { return null; } }
+
+async function apiRegister(payload){
+  const r = await fetch(BASE + ENDPOINTS.REGISTER, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+  if (!r.ok) {
+    const e = await safeJson(r);
+    throw new Error(e?.message || (r.status === 409 ? "Account already exists." : `Registration failed (${r.status})`));
+  }
+  return await safeJson(r); // { token, user }
+}
+
+async function apiLogin(payload){
+  const r = await fetch(BASE + ENDPOINTS.LOGIN, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+  if (!r.ok) {
+    const e = await safeJson(r);
+    // 404/400/401 → “sign up first” or invalid password
+    throw new Error(e?.message || (r.status === 404 ? "No account found. Please sign up first." :
+                                   r.status === 401 ? "Incorrect email or password." :
+                                   `Login failed (${r.status})`));
+  }
+  return await safeJson(r); // { token, user }
+}
+
 
 document.querySelector("form").addEventListener("submit", function (e) {
   e.preventDefault(); 

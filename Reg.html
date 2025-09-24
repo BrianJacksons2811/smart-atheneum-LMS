@@ -1,3 +1,4 @@
+<!-- Student Registration (Reg.html) -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,37 +10,37 @@
 </head>
 <body>
   <div class="wrapper">
-    <form action="">
+    <form id="registerForm" action="">
       <div class="form-head">
         <div class="first-icon">
           <img src="./Images/import_contacts_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="icon">
         </div>
         <div class="reg-head">
-        <h1>Student Registration</h1>
-        <p>Join Smart Atheneum as a learner</p>
+          <h1>Student Registration</h1>
+          <p>Join Smart Atheneum as a learner</p>
         </div>
       </div>
 
       <div class="input-row">
         <div class="input-box">
-          <input type="text" placeholder="Jane" name="firstName" required>
+          <input id="firstName" type="text" placeholder="Jane" name="firstName" required>
           <label>First Name</label>
         </div>
         <div class="input-box">
-          <input type="text" placeholder="Smith" name="lastName" required>
+          <input id="lastName" type="text" placeholder="Smith" name="lastName" required>
           <label>Last Name</label>
         </div>
       </div>
 
       <div class="input-box">
         <i class='bx bx-envelope'></i>
-        <input type="email" placeholder="student@smartatheneum.edu" name="email" required>
+        <input id="regEmail" type="email" placeholder="student@smartatheneum.edu" name="email" required>
         <label>Email</label>
       </div>
 
       <div class="input-row">
         <div class="input-box">
-          <select name="grade" required>
+          <select id="grade" name="grade" required>
             <option value="">Grade Level</option>
             <option>Grade 8</option>
             <option>Grade 9</option>
@@ -50,29 +51,35 @@
         </div>
         <div class="input-box">
           <i class='bx bx-calendar'></i>
-          <input type="date" name="dob" required>
+          <input id="dob" type="date" name="dob" required>
           <label>Date of Birth</label>
         </div>
       </div>
 
       <div class="input-box">
         <i class='bx bx-lock-alt'></i>
-        <input type="password" placeholder="Create a strong password" name="password" required>
+        <input id="regPassword" type="password" placeholder="Create a strong password" name="password" required>
         <label>Password</label>
       </div>
 
       <div class="input-box">
         <i class='bx bx-lock'></i>
-        <input type="password" placeholder="Confirm your password" name="confirmPassword" required>
+        <input id="regConfirm" type="password" placeholder="Confirm your password" name="confirmPassword" required>
         <label>Confirm Password</label>
       </div>
-        <div class="btn-link">
+
+      
+    
+
+      <div class="btn-link">
         <p class="login-link">Already have an account? <a href="login.html">Sign in</a></p>
       </div>
-           <button type="button" id="registerBtn" class="btn">Create Student Account</button>
 
-      <!-- Success message -->
-      <p id="successMsg" class="success-message">✅ You have successfully registered! Redirecting to login...</p>
+      <button type="button" id="registerBtn" class="btn">Create Student Account</button>
+
+      <!-- Inline messages -->
+      <p id="regError" class="error-message" role="alert" style="display:none;"></p>
+      <p id="successMsg" class="success-message" style="display:none;">✅ You have successfully registered! Redirecting to login...</p>
 
       <div class="back-to-home">
         <a href="index.html" class="back-btn">&#8592;Back to home</a>
