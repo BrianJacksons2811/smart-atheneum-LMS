@@ -82,6 +82,9 @@ if (activitiesRouter) app.use("/api/activities", activitiesRouter);
 
 app.use('/api/auth', require('./routes/auth')); 
 
+app.use(express.json());                       // body parser FIRST
+app.use('/api/auth', require('./routes/auth'));// API FIRST
+app.use(express.static(path.join(__dirname,'..'))); // static AFTER
 
 /* ------------ static AFTER api ---- */
 const publicDir = path.join(__dirname, ".."); // adjust if needed

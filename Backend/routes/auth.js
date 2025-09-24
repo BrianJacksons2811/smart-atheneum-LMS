@@ -79,4 +79,16 @@ router.post(['/login','/login/'], async (req, res) => {
   }
 });
 
+const { register: registerHandler, login: loginHandler } = require('../authController');
+
+// Handle CORS preflight (avoids 405 on some hosts/CDNs)
+router.options(['/register','/register/','/login','/login/'], (_req, res) => res.sendStatus(204));
+
+// Accept both with/without trailing slash
+router.post(['/register','/register/'], registerHandler);
+router.post(['/login','/login/'],     loginHandler);
+
+module.exports = router;
+
+
 module.exports = router;
