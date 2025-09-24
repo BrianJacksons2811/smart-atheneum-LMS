@@ -7,6 +7,7 @@
   const lastName    = document.getElementById("lastName");
   const regEmail    = document.getElementById("regEmail");
   const grade       = document.getElementById("grade");
+  const genderEl    = document.getElementById("gender");   // optional
   const dob         = document.getElementById("dob");
   const regPassword = document.getElementById("regPassword");
   const regConfirm  = document.getElementById("regConfirm");
@@ -17,6 +18,10 @@
   const DEFAULT_BASE = "https://smart-atheneum-lms-production.up.railway.app";
   const BASE = ((window.API_BASE || DEFAULT_BASE) + "").trim().replace(/\/+$/, ""); // no trailing slash
   const ENDPOINTS = window.API ? window.API : { REGISTER: "/api/auth/register", LOGIN: "/api/auth/login" };
+
+  // debug (keep inside IIFE so variables exist)
+  console.log("[REG] BASE =", BASE);
+  console.log("[REG] REGISTER URL =", BASE + ENDPOINTS.REGISTER);
 
   function showErr(m) {
     if (regError) { regError.textContent = m; regError.style.display = "block"; }
@@ -40,6 +45,8 @@
         body: JSON.stringify(payload),
       });
 
+      console.log("[REG] status =", r.status);
+
       if (!r.ok) {
         const body = await safeJson(r);
         const msg =
@@ -48,6 +55,7 @@
         throw new Error(msg);
       }
 
+      // OK: 2xx
       return (await safeJson(r)) || {};
     } catch (e) {
       if (e.name === "TypeError") {
@@ -75,23 +83,22 @@
       password: pass,
       role: "student",
       gradeCode: grade.value,
+      gender: genderEl ? (genderEl.value || null) : null, // optional
       dob: dob.value
     };
 
     btn.disabled = true;
+    const originalText = btn.textContent;
     btn.textContent = "Creating…";
     try {
       await apiRegister(payload);
       showOK("✅ Account registered successfully! Redirecting to sign in…");
-      setTimeout(() => { window.location.href = "login.html?registered=1"; }, 1000);
+      setTimeout(() => { window.location.href = "login.html?registered=1"; }, 800);
     } catch (e) {
       showErr(e.message || "Registration failed. Please try again.");
     } finally {
       btn.disabled = false;
-      btn.textContent = "Create Student Account";
+      btn.textContent = originalText || "Create Student Account";
     }
   });
 })();
-
-console.log("[REG] BASE =", BASE);
-console.log("[REG] REGISTER URL =", BASE + ENDPOINTS.REGISTER);

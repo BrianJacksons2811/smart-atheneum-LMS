@@ -94,3 +94,5 @@ process.on("unhandledRejection", (err) => {
 process.on("uncaughtException", (err) => {
   console.error("UNCAUGHT EXCEPTION:", err);
 });
+
+app.use("/api/auth", require("./routes/auth"));

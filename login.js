@@ -6,8 +6,8 @@
   const email      = document.getElementById("loginEmail");
   const pass       = document.getElementById("loginPassword");
   const err        = document.getElementById("loginError");
-  const banner     = document.getElementById("loginBanner");
-  const toggleIcon = document.getElementById("toggleLoginPassword");
+  const banner     = document.getElementById("loginBanner");          // optional <div id="loginBanner">
+  const toggleIcon = document.getElementById("toggleLoginPassword");  // eye icon
 
   // Show banner if redirected from registration
   const params = new URLSearchParams(window.location.search);
@@ -17,6 +17,10 @@
   const DEFAULT_BASE = "https://smart-atheneum-lms-production.up.railway.app";
   const BASE = ((window.API_BASE || DEFAULT_BASE) + "").trim().replace(/\/+$/, ""); // no trailing slash
   const ENDPOINTS = window.API ? window.API : { REGISTER: "/api/auth/register", LOGIN: "/api/auth/login" };
+
+  // Debug (remove later)
+  console.log("[LOGIN] BASE =", BASE);
+  console.log("[LOGIN] URL  =", BASE + ENDPOINTS.LOGIN);
 
   function showErr(m) { if (err) { err.textContent = m; err.style.display = "block"; } }
   function hideErr()  { if (err) err.style.display = "none"; }
@@ -34,9 +38,10 @@
         body: JSON.stringify(payload)
       });
 
+      console.log("[LOGIN] status =", r.status);
+
       if (!r.ok) {
         const body = await safeJson(r);
-      // Map common auth statuses to friendly messages
         const msg =
           body?.message ||
           (r.status === 404 ? "No account found. Please register first." :
@@ -47,7 +52,6 @@
 
       return (await safeJson(r)) || {};
     } catch (e) {
-      // Network/CORS/timeout surface here
       if (e.name === "TypeError") {
         throw new Error("Could not reach the API. Check your domain, CORS, or server logs.");
       }
@@ -70,6 +74,10 @@
 
       if (data?.token) localStorage.setItem("token", data.token);
       if (data?.user)  localStorage.setItem("currentUser", JSON.stringify(data.user));
+
+      // Friendly confirmation — proves name is stored
+      const firstName = (data?.user?.fullName || "").split(" ")[0] || "there";
+      alert(`Welcome back, ${firstName}!`);
 
       const role = data?.user?.role || "student";
       window.location.href = role === "teacher" ? "teach-dash.html" : "Dash-student.html";
