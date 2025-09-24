@@ -19,13 +19,15 @@
           <p>Access your learning dashboard</p>
         </div>
 
+        <div id="loginBanner" class="success-message" style="display:none;">🎉 Registration successful. Please sign in.</div>
+
         <div class="input-box">
           <input id="loginEmail" type="email" placeholder="Email" required>
           <i class='bx bx-envelope'></i>
         </div>
 
         <div class="input-box">
-          <input id="loginPassword" type="password" placeholder="Password" required>
+          <input id="loginPassword" type="password" placeholder="Password" required minlength="6">
           <i class='bx bx-show toggle-password' id="toggleLoginPassword"></i>
         </div>
 
@@ -34,14 +36,12 @@
           <a href="forgot-Pass.html">Forgot password</a>
         </div>
 
-        <!-- Button is a real submit; JS will handle the redirect -->
         <button type="submit" class="btn">Sign-In</button>
 
-        <!-- Inline error area -->
         <p id="loginError" class="error-message" role="alert" style="display:none;"></p>
 
         <div class="register-link">
-          <p>Don’t have an account? <a href="Reg.html">Sign-Up!</a></p>
+          <p>Don’t have an account? <a href="reg.html">Sign-Up!</a></p>
         </div>
         <div class="back-to-home">
           <a href="index.html" class="back-btn">&#8592;Back to home</a>
@@ -49,6 +49,6 @@
       </form>
     </div>
     <script src="config.js"></script>
-    <script src="index.js"></script>
+    <script src="login.js"></script>
   </body>
 </html>

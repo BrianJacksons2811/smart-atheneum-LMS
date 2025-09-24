@@ -1,4 +1,3 @@
-<!-- Student Registration (Reg.html) -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -58,18 +57,15 @@
 
       <div class="input-box">
         <i class='bx bx-lock-alt'></i>
-        <input id="regPassword" type="password" placeholder="Create a strong password" name="password" required>
+        <input id="regPassword" type="password" placeholder="Create a strong password" name="password" required minlength="6">
         <label>Password</label>
       </div>
 
       <div class="input-box">
         <i class='bx bx-lock'></i>
-        <input id="regConfirm" type="password" placeholder="Confirm your password" name="confirmPassword" required>
+        <input id="regConfirm" type="password" placeholder="Confirm your password" name="confirmPassword" required minlength="6">
         <label>Confirm Password</label>
       </div>
-
-      
-    
 
       <div class="btn-link">
         <p class="login-link">Already have an account? <a href="login.html">Sign in</a></p>
@@ -86,6 +82,8 @@
       </div>
     </form>
   </div>
-  <script src="index.js"></script>
+
+  <script src="config.js"></script>
+  <script src="reg.js"></script>
 </body>
 </html>
