@@ -1,4 +1,20 @@
 // ---------- Login wiring (clean + API-ready) ----------
+
+
+
+  // Hard-lock the Sign-Up link to reg.html and bypass any global interceptors
+  (function () {
+    const a = document.getElementById('signupLink');
+    if (!a) return;
+
+    a.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();        // ignore any global click handlers
+      window.location.assign('./reg.html');
+    });
+  })();
+
+
 (function () {
   const form       = document.getElementById("loginForm");
   if (!form) return;
