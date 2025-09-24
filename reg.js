@@ -80,18 +80,21 @@
 
     btn.disabled = true;
     btn.textContent = "Creating…";
-    try {
-      await apiRegister(payload);
-      showOK("✅ Account registered successfully! Redirecting to sign in…");
-      setTimeout(() => { window.location.href = "login.html?registered=1"; }, 1000);
-    } catch (e) {
-      showErr(e.message || "Registration failed. Please try again.");
-    } finally {
-      btn.disabled = false;
-      btn.textContent = "Create Student Account";
-    }
+    // inside try { ... } after the fetch call:
+     if (!r.ok) {
+  const txt = await r.text().catch(()=>"");
+  return showErr(txt || `Registration failed (${r.status})`);
+   }
+
+   // ✅ redirect on any 2xx – don’t wait for JSON
+   showOK("✅ Account registered! Redirecting…");
+   setTimeout(() => { window.location.href = "login.html?registered=1"; }, 800);
+    return;
+
   });
 })();
 
 console.log("[REG] BASE =", BASE);
 console.log("[REG] REGISTER URL =", BASE + ENDPOINTS.REGISTER);
+console.log("[REG] status =", r.status);
+        
