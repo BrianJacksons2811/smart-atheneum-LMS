@@ -10,7 +10,7 @@ const cors = require("cors");
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-/* ------------------------- helpers ------------------------- */
+/* ------------ helpers ------------ */
 function safeRequire(p) {
   try {
     return require(p);
@@ -20,8 +20,7 @@ function safeRequire(p) {
   }
 }
 
-/* ------------------------- database ------------------------ */
-// Don’t crash the app if DB init fails — still serve /health
+/* ------------ db (optional) ------ */
 let pool = null;
 try {
   pool = safeRequire("./database"); // should export a mysql2/promise pool
@@ -31,8 +30,7 @@ try {
   console.error("❌ DB init failed (continuing without DB):", e.message);
 }
 
-/* ------------------------- middleware ---------------------- */
-// CORS (allow all while testing; restrict origin later)
+/* ------------ middleware ---------- */
 app.use(
   cors({
     origin: "*",
@@ -40,22 +38,21 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
-app.options("*", cors()); // handle preflight
+app.options("*", cors());
 
-// MUST be before routes so req.body is parsed
 app.use(express.json({ limit: "2mb" }));
 app.use(express.urlencoded({ extended: true }));
 
-/* (optional) tiny request logger to debug 405/404 issues */
-// app.use((req, res, next) => {
-//   const t0 = Date.now();
-//   res.on("finish", () =>
-//     console.log(`[REQ] ${req.method} ${req.originalUrl} -> ${res.statusCode} (${Date.now()-t0}ms)`)
-//   );
-//   next();
-// });
+// Request logger (useful while debugging)
+app.use((req, res, next) => {
+  const t0 = Date.now();
+  res.on("finish", () =>
+    console.log(`[REQ] ${req.method} ${req.originalUrl} -> ${res.statusCode} (${Date.now() - t0}ms)`)
+  );
+  next();
+});
 
-/* ------------------------- health -------------------------- */
+/* ------------ health -------------- */
 app.get("/health", (_req, res) => res.json({ ok: true, ts: Date.now() }));
 app.get("/health/db", async (_req, res) => {
   if (!pool) return res.status(500).json({ ok: false, error: "DB not initialized" });
@@ -67,7 +64,7 @@ app.get("/health/db", async (_req, res) => {
   }
 });
 
-/* ------------------------- routes (API FIRST) --------------- */
+/* ------------ routes (API FIRST) -- */
 const authRouter = safeRequire("./routes/auth");
 if (authRouter) app.use("/api/auth", authRouter);
 
@@ -83,26 +80,25 @@ if (uploadsRouter) app.use("/api/uploads", uploadsRouter);
 const activitiesRouter = safeRequire("./routes/activities");
 if (activitiesRouter) app.use("/api/activities", activitiesRouter);
 
-/* ------------------------- static AFTER api ----------------- */
-const publicDir = path.join(__dirname, ".."); // adjust if your HTML lives elsewhere
-if (fs.existsSync(publicDir)) {
-  app.use(express.static(publicDir));
-}
+app.use('/api/auth', require('./routes/auth')); 
 
-/* ------------------------- fallbacks ------------------------ */
+
+/* ------------ static AFTER api ---- */
+const publicDir = path.join(__dirname, ".."); // adjust if needed
+if (fs.existsSync(publicDir)) app.use(express.static(publicDir));
+
+/* ------------ 404 & errors -------- */
 app.use((req, res) => res.status(404).json({ message: `Not found: ${req.method} ${req.originalUrl}` }));
+app.use((err, _req, res, _next) => {
+  console.error("🔥 Unhandled error:", err);
+  res.status(err.status || 500).json({ message: err.message || "Server error" });
+});
 
-/* ------------------------- start ---------------------------- */
-// IMPORTANT: bind to 0.0.0.0 so Railway can reach it
+/* ------------ start --------------- */
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`[READY] API listening on port ${PORT}`);
-  console.log("Try /health and /health/db");
+  console.log("Try /health and POST /api/auth/register");
 });
 
-/* ------------------------- safety -------------------------- */
-process.on("unhandledRejection", (err) => {
-  console.error("UNHANDLED REJECTION:", err);
-});
-process.on("uncaughtException", (err) => {
-  console.error("UNCAUGHT EXCEPTION:", err);
-});
+process.on("unhandledRejection", (err) => console.error("UNHANDLED:", err));
+process.on("uncaughtException", (err) => console.error("UNCAUGHT:", err));
