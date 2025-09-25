@@ -1,7 +1,7 @@
-function sendResetLink() {
+
+async function sendResetLink() {
   const emailInput = document.getElementById("email").value.trim();
   const messageBox = document.getElementById("message");
-
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   if (!emailPattern.test(emailInput)) {
@@ -11,9 +11,23 @@ function sendResetLink() {
     return;
   }
 
-  messageBox.textContent = `A password reset link has been sent to ${emailInput}`;
-  messageBox.className = "message success";
-  messageBox.style.display = "block";
+  try {
+    const res = await fetch('/api/auth/forgot-password', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: emailInput })
+    });
+    const data = await res.json();
 
+    if (!res.ok) throw new Error(data.error || 'Failed to send');
+
+    messageBox.textContent = `If an account exists for ${emailInput}, a reset link has been sent.`;
+    messageBox.className = "message success";
+  } catch (e) {
+    messageBox.textContent = e.message || 'Something went wrong.';
+    messageBox.className = "message error";
+  }
+  messageBox.style.display = "block";
   document.getElementById("email").value = "";
 }
+
