@@ -196,41 +196,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// Serve public assets from detected root
-app.use("/Images", express.static(path.join(ROOT_DIR, "Images")));
-app.use("/content", express.static(path.join(ROOT_DIR, "content")));
-app.use(express.static(ROOT_DIR)); // serve root files (HTML/CSS/JS)
-
-// Choose index.html or home.html automatically
-function resolveHomeFile() {
-  const idx = path.join(ROOT_DIR, "index.html");
-  const home = path.join(ROOT_DIR, "home.html");
-  if (fs.existsSync(idx)) return idx;
-  if (fs.existsSync(home)) return home;
-  return null;
-}
-
-// /
-app.get("/", (req, res, next) => {
-  const file = resolveHomeFile();
-  if (!file) return next();
-  res.sendFile(file);
-});
-
-// /index.html (alias)
-app.get("/index.html", (req, res, next) => {
-  const file = resolveHomeFile();
-  if (!file) return next();
-  res.sendFile(file);
-});
-
-// /login.html, /reg.html, etc. from detected root
-app.get("/:page.html", (req, res, next) => {
-  if (BLOCKED_PREFIXES.some((p) => req.params.page.startsWith(p.slice(1)))) return res.status(404).end();
-  const file = path.join(ROOT_DIR, `${req.params.page}.html`);
-  fs.access(file, fs.constants.R_OK, (err) => (err ? next() : res.sendFile(file)));
-});
-
 /* ------------ 404 & errors -------- */
 // JSON 404 for API ONLY (so HTML clicks don’t get JSON)
 app.use("/api", (req, res) => {
