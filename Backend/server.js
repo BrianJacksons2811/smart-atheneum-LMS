@@ -19,6 +19,10 @@ function safeRequire(p) {
   catch (e) { console.warn(`[WARN] Optional module not loaded: ${p} — ${e.message}`); return null; }
 }
 
+/* ---------- important: where your HTML lives ---------- */
+// server runs from /Backend, HTML is in repo root
+const ROOT_DIR = path.resolve(__dirname, "..");
+
 /* ------------ db (optional) ------ */
 let pool = null;
 try {
@@ -175,17 +179,15 @@ app.use((req, res, next) => {
   next();
 });
 
-// Serve public assets
-app.use("/Images", express.static(path.join(__dirname, "Images")));
-app.use("/content", express.static(path.join(__dirname, "content")));
+// Serve public assets from repo root
+app.use("/Images", express.static(path.join(ROOT_DIR, "Images")));
+app.use("/content", express.static(path.join(ROOT_DIR, "content")));
+app.use(express.static(ROOT_DIR)); // serve root files (HTML/CSS/JS)
 
-// Serve all root assets (HTML/CSS/JS at repo root)
-app.use(express.static(path.join(__dirname)));
-
-// Home-file resolver (index.html or home.html)
+// Home-file resolver (index.html or home.html in repo root)
 function resolveHomeFile() {
-  const idx = path.join(__dirname, "index.html");
-  const home = path.join(__dirname, "home.html");
+  const idx = path.join(ROOT_DIR, "index.html");
+  const home = path.join(ROOT_DIR, "home.html");
   if (fs.existsSync(idx)) return idx;
   if (fs.existsSync(home)) return home;
   return null;
@@ -208,12 +210,12 @@ app.get("/index.html", (req, res, next) => {
 // Route: any other root-level page, e.g. /login.html, /reg.html
 app.get("/:page.html", (req, res, next) => {
   if (BLOCKED_PREFIXES.some((p) => req.params.page.startsWith(p.slice(1)))) return res.status(404).end();
-  const file = path.join(__dirname, `${req.params.page}.html`);
+  const file = path.join(ROOT_DIR, `${req.params.page}.html`);
   fs.access(file, fs.constants.R_OK, (err) => (err ? next() : res.sendFile(file)));
 });
 
 /* ------------ 404 & errors -------- */
-// JSON 404 for API ONLY (so page clicks don’t get JSON)
+// JSON 404 for API ONLY (so HTML clicks don’t get JSON)
 app.use("/api", (req, res) => {
   res.status(404).json({ message: `Not found: ${req.method} ${req.originalUrl}` });
 });
