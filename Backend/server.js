@@ -10,6 +10,18 @@ const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
 
+
+// Pick home file once at boot
+const HOME_FILE =
+  fs.existsSync(path.join(ROOT_DIR, "index.html"))
+    ? path.join(ROOT_DIR, "index.html")
+    : (fs.existsSync(path.join(ROOT_DIR, "home.html"))
+        ? path.join(ROOT_DIR, "home.html")
+        : null);
+
+console.log("[HOME FILE]", HOME_FILE || "NONE");
+
+
 const app = express();
 const PORT = process.env.PORT || 4000;
 
@@ -18,6 +30,8 @@ function safeRequire(p) {
   try { return require(p); }
   catch (e) { console.warn(`[WARN] Optional module not loaded: ${p} — ${e.message}`); return null; }
 }
+
+
 
 /* ---------- Detect where your HTML lives ---------- */
 function detectRootDir() {
@@ -194,6 +208,13 @@ app.use((req, res, next) => {
     return res.status(404).end();
   }
   next();
+});
+
+app.get("/", (req, res, next) => { if (!HOME_FILE) return next(); res.sendFile(HOME_FILE); });
+app.get("/index.html", (req, res, next) => { if (!HOME_FILE) return next(); res.sendFile(HOME_FILE); });
+app.get("/:page.html", (req, res, next) => {
+  const file = path.join(ROOT_DIR, `${req.params.page}.html`);
+  fs.access(file, fs.constants.R_OK, err => (err ? next() : res.sendFile(file)));
 });
 
 /* ------------ 404 & errors -------- */
