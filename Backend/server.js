@@ -10,18 +10,6 @@ const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
 
-
-// Pick home file once at boot
-const HOME_FILE =
-  fs.existsSync(path.join(ROOT_DIR, "index.html"))
-    ? path.join(ROOT_DIR, "index.html")
-    : (fs.existsSync(path.join(ROOT_DIR, "home.html"))
-        ? path.join(ROOT_DIR, "home.html")
-        : null);
-
-console.log("[HOME FILE]", HOME_FILE || "NONE");
-
-
 const app = express();
 const PORT = process.env.PORT || 4000;
 
@@ -31,28 +19,27 @@ function safeRequire(p) {
   catch (e) { console.warn(`[WARN] Optional module not loaded: ${p} — ${e.message}`); return null; }
 }
 
-
-
-/* ---------- Detect where your HTML lives ---------- */
-function detectRootDir() {
-  const candidates = [
-    __dirname,                         // server at repo root
-    path.resolve(__dirname, ".."),     // server in /Backend, HTML in repo root
-    path.resolve(__dirname, "../.."),  // deeper nesting, just in case
-  ];
-  for (const dir of candidates) {
-    if (
+/* ---------- AUTO-DETECT ROOT (must come before using it) ---------- */
+const ROOT_DIR =
+  [__dirname, path.resolve(__dirname, ".."), path.resolve(__dirname, "../..")]
+    .find(dir =>
       fs.existsSync(path.join(dir, "index.html")) ||
       fs.existsSync(path.join(dir, "home.html"))
-    ) return dir;
-  }
-  return __dirname;
-}
-const ROOT_DIR = detectRootDir();
+    ) || __dirname;
+
 console.log("[WEB ROOT]", ROOT_DIR);
 ["index.html","home.html","reg.html","login.html"].forEach(f => {
   console.log(`[CHECK] ${f}:`, fs.existsSync(path.join(ROOT_DIR, f)) ? "FOUND" : "MISSING");
 });
+
+/* ---------- PICK HOME FILE (uses ROOT_DIR) ---------- */
+const HOME_FILE =
+  fs.existsSync(path.join(ROOT_DIR, "index.html"))
+    ? path.join(ROOT_DIR, "index.html")
+    : (fs.existsSync(path.join(ROOT_DIR, "home.html"))
+        ? path.join(ROOT_DIR, "home.html")
+        : null);
+console.log("[HOME FILE]", HOME_FILE || "NONE");
 
 /* ------------ db (optional) ------ */
 let pool = null;
@@ -210,11 +197,28 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get("/", (req, res, next) => { if (!HOME_FILE) return next(); res.sendFile(HOME_FILE); });
-app.get("/index.html", (req, res, next) => { if (!HOME_FILE) return next(); res.sendFile(HOME_FILE); });
+// serve public assets from detected root
+app.use("/Images",  express.static(path.join(ROOT_DIR, "Images")));
+app.use("/content", express.static(path.join(ROOT_DIR, "content")));
+app.use(express.static(ROOT_DIR)); // serve root files (HTML/CSS/JS)
+
+// /
+app.get("/", (req, res, next) => {
+  if (!HOME_FILE) return next();
+  res.sendFile(HOME_FILE);
+});
+
+// /index.html (alias)
+app.get("/index.html", (req, res, next) => {
+  if (!HOME_FILE) return next();
+  res.sendFile(HOME_FILE);
+});
+
+// /login.html, /reg.html, etc. from ROOT_DIR
 app.get("/:page.html", (req, res, next) => {
+  if (BLOCKED_PREFIXES.some((p) => req.params.page.startsWith(p.slice(1)))) return res.status(404).end();
   const file = path.join(ROOT_DIR, `${req.params.page}.html`);
-  fs.access(file, fs.constants.R_OK, err => (err ? next() : res.sendFile(file)));
+  fs.access(file, fs.constants.R_OK, (err) => (err ? next() : res.sendFile(file)));
 });
 
 /* ------------ 404 & errors -------- */
@@ -225,8 +229,7 @@ app.use("/api", (req, res) => {
 
 // Final fallback for non-API requests (serve home if present)
 app.use((req, res) => {
-  const file = resolveHomeFile();
-  if (file) return res.sendFile(file);
+  if (HOME_FILE) return res.sendFile(HOME_FILE);
   res.status(404).send("Page not found");
 });
 
@@ -238,7 +241,7 @@ app.use((err, _req, res, _next) => {
 /* ------------ start --------------- */
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`[READY] API listening on port ${PORT}`);
-  console.log("Try GET /, GET /login.html, GET /health, and POST /api/auth/forgot-password");
+  console.log("Try GET /, GET /reg.html, GET /health, and POST /api/auth/forgot-password");
 });
 
 process.on("unhandledRejection", (err) => console.error("UNHANDLED:", err));
