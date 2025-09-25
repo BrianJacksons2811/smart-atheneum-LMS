@@ -7,7 +7,7 @@ const fs = require("fs");
 const express = require("express");
 const cors = require("cors");
 const crypto = require("crypto");
-const bcrypt = require('bcryptjs');
+const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
 
 const app = express();
@@ -15,12 +15,8 @@ const PORT = process.env.PORT || 4000;
 
 /* ------------ helpers ------------ */
 function safeRequire(p) {
-  try {
-    return require(p);
-  } catch (e) {
-    console.warn(`[WARN] Optional module not loaded: ${p} — ${e.message}`);
-    return null;
-  }
+  try { return require(p); }
+  catch (e) { console.warn(`[WARN] Optional module not loaded: ${p} — ${e.message}`); return null; }
 }
 
 /* ------------ db (optional) ------ */
@@ -54,7 +50,7 @@ app.options("*", cors());
 app.use(express.json({ limit: "2mb" }));
 app.use(express.urlencoded({ extended: true }));
 
-// Request logger (useful while debugging)
+// Request logger
 app.use((req, res, next) => {
   const t0 = Date.now();
   res.on("finish", () =>
@@ -93,7 +89,7 @@ const activitiesRouter = safeRequire("./routes/activities");
 if (activitiesRouter) app.use("/api/activities", activitiesRouter);
 
 /* ------------ BUILT-IN AUTH endpoints (forgot/reset) ---- */
-/** Request password reset: user submits email */
+// Request password reset
 app.post("/api/auth/forgot-password", async (req, res) => {
   try {
     const { email } = req.body;
@@ -116,7 +112,7 @@ app.post("/api/auth/forgot-password", async (req, res) => {
       [user.id, tokenHash, expiresAt]
     );
 
-    const base = process.env.FRONTEND_URL || "https://smart-atheneum-lms-production.up.railway.app"; // e.g., https://<your-app>.railway.app
+    const base = process.env.FRONTEND_URL || "https://smart-atheneum-lms-production.up.railway.app";
     const resetUrl = `${base}/reset-forgot.html?token=${token}&id=${user.id}`;
 
     await mailer.sendMail({
@@ -138,7 +134,7 @@ app.post("/api/auth/forgot-password", async (req, res) => {
   }
 });
 
-/** Reset password: user posts new password with token */
+// Reset password
 app.post("/api/auth/reset-password", async (req, res) => {
   try {
     const { userId, token, newPassword } = req.body;
@@ -169,8 +165,8 @@ app.post("/api/auth/reset-password", async (req, res) => {
   }
 });
 
-/* ------------ STATIC AFTER API ---- */
-/** Block sensitive folders/files from being served */
+/* ------------ STATIC + PAGES ------ */
+// Block sensitive folders/files
 const BLOCKED_PREFIXES = ["/Backend", "/node_modules"];
 app.use((req, res, next) => {
   if (BLOCKED_PREFIXES.some((p) => req.path.startsWith(p)) || req.path === "/.env") {
@@ -179,24 +175,56 @@ app.use((req, res, next) => {
   next();
 });
 
-/** Public asset folders you actually use */
+// Serve public assets
 app.use("/Images", express.static(path.join(__dirname, "Images")));
-app.use("/content", express.static(path.join(__dirname, "content"))); // keep if you reference /content/*
+app.use("/content", express.static(path.join(__dirname, "content")));
 
-/** Serve root-level HTML pages (NO moving needed) */
-// Change to 'index.html' if that’s your landing file
-app.get("/", (req, res) => res.sendFile(path.join(__dirname, "index.html")));
+// Serve all root assets (HTML/CSS/JS at repo root)
+app.use(express.static(path.join(__dirname)));
 
-// Allow /something.html to load root files safely
+// Home-file resolver (index.html or home.html)
+function resolveHomeFile() {
+  const idx = path.join(__dirname, "index.html");
+  const home = path.join(__dirname, "home.html");
+  if (fs.existsSync(idx)) return idx;
+  if (fs.existsSync(home)) return home;
+  return null;
+}
+
+// Route: /
+app.get("/", (req, res, next) => {
+  const file = resolveHomeFile();
+  if (!file) return next();
+  res.sendFile(file);
+});
+
+// Route: /index.html (alias to home if needed)
+app.get("/index.html", (req, res, next) => {
+  const file = resolveHomeFile();
+  if (!file) return next();
+  res.sendFile(file);
+});
+
+// Route: any other root-level page, e.g. /login.html, /reg.html
 app.get("/:page.html", (req, res, next) => {
   if (BLOCKED_PREFIXES.some((p) => req.params.page.startsWith(p.slice(1)))) return res.status(404).end();
-  res.sendFile(path.join(__dirname, `${req.params.page}.html`), (err) => (err ? next() : null));
+  const file = path.join(__dirname, `${req.params.page}.html`);
+  fs.access(file, fs.constants.R_OK, (err) => (err ? next() : res.sendFile(file)));
 });
 
 /* ------------ 404 & errors -------- */
-app.use((req, res) =>
-  res.status(404).json({ message: `Not found: ${req.method} ${req.originalUrl}` })
-);
+// JSON 404 for API ONLY (so page clicks don’t get JSON)
+app.use("/api", (req, res) => {
+  res.status(404).json({ message: `Not found: ${req.method} ${req.originalUrl}` });
+});
+
+// Final fallback for non-API requests (serve home if present)
+app.use((req, res) => {
+  const file = resolveHomeFile();
+  if (file) return res.sendFile(file);
+  res.status(404).send("Page not found");
+});
+
 app.use((err, _req, res, _next) => {
   console.error("🔥 Unhandled error:", err);
   res.status(err.status || 500).json({ message: err.message || "Server error" });
@@ -205,7 +233,7 @@ app.use((err, _req, res, _next) => {
 /* ------------ start --------------- */
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`[READY] API listening on port ${PORT}`);
-  console.log("Try GET /health and POST /api/auth/forgot-password");
+  console.log("Try GET /, GET /login.html, GET /health, and POST /api/auth/forgot-password");
 });
 
 process.on("unhandledRejection", (err) => console.error("UNHANDLED:", err));
