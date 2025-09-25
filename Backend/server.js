@@ -7,7 +7,7 @@ const fs = require("fs");
 const express = require("express");
 const cors = require("cors");
 const crypto = require("crypto");
-const bcrypt = require("bcrypt");
+const bcrypt = require('bcryptjs');
 const nodemailer = require("nodemailer");
 
 const app = express();
