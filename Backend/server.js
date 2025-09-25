@@ -19,9 +19,26 @@ function safeRequire(p) {
   catch (e) { console.warn(`[WARN] Optional module not loaded: ${p} — ${e.message}`); return null; }
 }
 
-/* ---------- important: where your HTML lives ---------- */
-// server runs from /Backend, HTML is in repo root
-const ROOT_DIR = path.resolve(__dirname, "..");
+/* ---------- Detect where your HTML lives ---------- */
+function detectRootDir() {
+  const candidates = [
+    __dirname,                         // server at repo root
+    path.resolve(__dirname, ".."),     // server in /Backend, HTML in repo root
+    path.resolve(__dirname, "../.."),  // deeper nesting, just in case
+  ];
+  for (const dir of candidates) {
+    if (
+      fs.existsSync(path.join(dir, "index.html")) ||
+      fs.existsSync(path.join(dir, "home.html"))
+    ) return dir;
+  }
+  return __dirname;
+}
+const ROOT_DIR = detectRootDir();
+console.log("[WEB ROOT]", ROOT_DIR);
+["index.html","home.html","reg.html","login.html"].forEach(f => {
+  console.log(`[CHECK] ${f}:`, fs.existsSync(path.join(ROOT_DIR, f)) ? "FOUND" : "MISSING");
+});
 
 /* ------------ db (optional) ------ */
 let pool = null;
@@ -179,12 +196,12 @@ app.use((req, res, next) => {
   next();
 });
 
-// Serve public assets from repo root
+// Serve public assets from detected root
 app.use("/Images", express.static(path.join(ROOT_DIR, "Images")));
 app.use("/content", express.static(path.join(ROOT_DIR, "content")));
 app.use(express.static(ROOT_DIR)); // serve root files (HTML/CSS/JS)
 
-// Home-file resolver (index.html or home.html in repo root)
+// Choose index.html or home.html automatically
 function resolveHomeFile() {
   const idx = path.join(ROOT_DIR, "index.html");
   const home = path.join(ROOT_DIR, "home.html");
@@ -193,21 +210,21 @@ function resolveHomeFile() {
   return null;
 }
 
-// Route: /
+// /
 app.get("/", (req, res, next) => {
   const file = resolveHomeFile();
   if (!file) return next();
   res.sendFile(file);
 });
 
-// Route: /index.html (alias to home if needed)
+// /index.html (alias)
 app.get("/index.html", (req, res, next) => {
   const file = resolveHomeFile();
   if (!file) return next();
   res.sendFile(file);
 });
 
-// Route: any other root-level page, e.g. /login.html, /reg.html
+// /login.html, /reg.html, etc. from detected root
 app.get("/:page.html", (req, res, next) => {
   if (BLOCKED_PREFIXES.some((p) => req.params.page.startsWith(p.slice(1)))) return res.status(404).end();
   const file = path.join(ROOT_DIR, `${req.params.page}.html`);
