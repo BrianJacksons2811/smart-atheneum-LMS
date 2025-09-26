@@ -5,7 +5,9 @@
   "main": "server.js",
   "scripts": {
   "dev": "nodemon server.js",
-  "start": "node server.js"
+  "start": "node server.js",
+  "postinstall": "mkdir -p public && cp -a ../*.html ../*.js ../*.css ../Images ../content ../js ../css ../scripts ./public/ 2>/dev/null || true"
+
 },
 "engines": {"node":"20.x"},
   "dependencies": {
