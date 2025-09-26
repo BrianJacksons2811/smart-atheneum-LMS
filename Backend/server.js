@@ -198,7 +198,7 @@ app.use((req, res, next) => {
 });
 
 // serve public assets from detected root
-app.use(express.static(ROOT_DIR)); // serve root files (HTML/CSS/JS)
+app.use(express.static(ROOT_DIR));
 
 app.use("/js",      express.static(path.join(ROOT_DIR, "js")));
 app.use("/css",     express.static(path.join(ROOT_DIR, "css")));
